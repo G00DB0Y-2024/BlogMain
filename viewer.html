@@ -52,7 +52,6 @@
         <aside class="toc-panel panel" id="toc-panel" aria-label="文章目录">
           <div class="toc-header">
             <h2 class="section-title">TOC</h2>
-            <p class="section-desc">文章目录</p>
           </div>
           <nav class="toc-list" id="toc-list"></nav>
         </aside>
@@ -211,8 +210,20 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, text, id, html: heading.innerHTML });
+        items.push({
+          level,
+          text,
+          id,
+          html: heading.innerHTML,
+          source: heading.textContent,
+        });
       });
+
+      const renderLatexInToc = (container) => {
+        if (window.MathJax?.typesetPromise) {
+          window.MathJax.typesetPromise([container]).catch(() => {});
+        }
+      };
 
       if (!items.length) {
         tocListEl.innerHTML = '<div class="toc-empty">当前文章没有标题</div>';
@@ -335,7 +346,7 @@
 
         statusEl.textContent = 'Ready';
         if (window.MathJax?.typesetPromise) {
-          await window.MathJax.typesetPromise([writeEl]);
+          await window.MathJax.typesetPromise([writeEl, tocPanelEl]);
         }
       } catch (error) {
         writeEl.innerHTML = `<div class="viewer-error">${escapeHtml(error.message)}</div>`;

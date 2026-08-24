@@ -438,12 +438,16 @@ textarea {
 
 #write .math-display {
   margin: 1rem 0;
-  overflow-x: auto;
+  overflow: visible;
 }
 
-#write .math-display mjx-container {
+#write .math-display mjx-container,
+#write mjx-container[display="true"] {
   display: block !important;
   text-align: center;
+  overflow: visible !important;
+  max-width: 100%;
+  height: auto !important;
 }
 
 #write pre {
@@ -536,8 +540,7 @@ textarea {
   background: rgba(249, 251, 255, 0.95);
   box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
   max-height: calc(100vh - 40px);
-  overflow-x: visible;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .toc-panel.is-collapsed {
@@ -553,6 +556,9 @@ textarea {
   flex-direction: column;
   gap: 4px;
   overflow: visible;
+  max-height: calc(100vh - 160px);
+  padding-right: 2px;
+  margin-right: -2px;
 }
 
 .toc-empty {
@@ -571,6 +577,8 @@ textarea {
   transform: translateX(calc(var(--toc-indent, 0) * 12px));
   white-space: normal;
   overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .toc-link:hover {

@@ -461,7 +461,9 @@
         const active = new URL(window.location.href).hash.replace(/^#/, '');
         if (active) {
           const target = document.getElementById(active);
-          target?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          if (target) {
+            scrollToHeading(target);
+          }
         }
         scheduleActiveTocUpdate();
         scheduleTocMotion();
@@ -510,22 +512,29 @@
 
     window.addEventListener('resize', scheduleTocMotion);
 
+    function scrollToHeading(target) {
+      const pageOffset = 24;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - pageOffset;
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    }
+
     tocListEl.addEventListener('click', (event) => {
       const link = event.target.closest('.toc-link');
-      if (!link) return;
+      if (!link || !tocListEl.contains(link)) return;
       const targetId = link.dataset.headingId;
       const target = targetId ? document.getElementById(targetId) : null;
       if (!target) return;
       event.preventDefault();
+      event.stopPropagation();
       window.history.pushState(null, '', `#${encodeURIComponent(targetId)}`);
       tocSyncMode = 'click';
       window.clearTimeout(tocSyncModeTimer);
-      target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      scrollToHeading(target);
       scrollActiveTocIntoView(link, 'top');
       tocSyncModeTimer = window.setTimeout(() => {
         tocSyncMode = 'scroll';
         scheduleActiveTocUpdate();
-      }, 700);
+      }, 900);
     });
 
     toggleTocBtn.addEventListener('click', () => {

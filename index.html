@@ -110,6 +110,14 @@
       return `<ul class="file-tree${depth === 0 ? ' root-tree' : ''}" role="${depth === 0 ? 'tree' : 'group'}">${items}</ul>`;
     }
 
+    function syncRootLineWidth() {
+      const rootLine = document.querySelector('.tree-root-line');
+      const treeWrap = document.querySelector('.tree-wrap');
+      if (!rootLine || !treeWrap) return;
+      const treeWidth = Math.max(treeWrap.clientWidth - 28, treeEl.scrollWidth - 28);
+      rootLine.style.width = `${treeWidth}px`;
+    }
+
     async function init() {
       try {
         const response = await fetch('./manifest.json', { cache: 'no-cache' });
@@ -129,6 +137,8 @@
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
         treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-node-title tree-root-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        requestAnimationFrame(syncRootLineWidth);
+        window.addEventListener('resize', syncRootLineWidth);
       } catch (error) {
         treeEl.innerHTML = `<div class="tree-empty">无法读取目录索引：${escapeHtml(error.message)}</div>`;
       }

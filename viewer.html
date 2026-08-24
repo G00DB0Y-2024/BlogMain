@@ -380,7 +380,8 @@
       const maxScroll = tocPanelEl.scrollHeight - tocPanelEl.clientHeight;
 
       if (mode === 'top') {
-        tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop, 0), maxScroll), behavior: 'smooth' });
+        const topPadding = 34;
+        tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
         return;
       }
 

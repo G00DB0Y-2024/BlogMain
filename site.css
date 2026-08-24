@@ -488,6 +488,21 @@ details[open] > ul {
   white-space: nowrap;
   font-weight: 600;
   color: var(--text-primary);
+  cursor: pointer;
+}
+
+.copy-feedback {
+  opacity: 0;
+  transform: translateX(-4px);
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.copy-feedback.is-visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .back-link {

@@ -16,19 +16,14 @@
     <div class="viewer-card">
       <div class="viewer-bar">
         <div class="viewer-bar-left">
-          <a class="back-link" href="./index.html">← 首页</a>
-          <span class="viewer-separator" aria-hidden="true">·</span>
-          <span class="viewer-title" id="viewer-title">Article</span>
+          <span class="viewer-title" id="viewer-title" role="button" tabindex="0" title="点击复制链接">Article</span>
+          <span class="copy-feedback" id="copy-feedback" aria-live="polite"></span>
         </div>
         <div class="viewer-status" id="viewer-status">Loading…</div>
       </div>
 
       <div class="viewer-layout">
         <main class="viewer-content">
-          <div class="viewer-toolbar">
-            <button class="viewer-button" id="copy-link" type="button">复制链接</button>
-            <button class="viewer-button" id="toggle-toc" type="button">目录</button>
-          </div>
           <article id="write" aria-label="文章内容">
             <div class="viewer-error">正在加载文章…</div>
           </article>
@@ -62,9 +57,8 @@
     const titleEl = document.querySelector('#viewer-title');
     const tocPanelEl = document.querySelector('#toc-panel');
     const tocListEl = document.querySelector('#toc-list');
-    const toggleTocBtn = document.querySelector('#toggle-toc');
-    const copyLinkBtn = document.querySelector('#copy-link');
     const markdownUrl = new URL(window.location.href).searchParams.get('file');
+    const copyFeedbackEl = document.querySelector('#copy-feedback');
 
     function getMarkdownPath() {
       const decoded = safeDecodeURIComponent(markdownUrl || '');
@@ -525,20 +519,30 @@
       }, 900);
     });
 
-    toggleTocBtn.addEventListener('click', () => {
-      tocPanelEl.classList.toggle('is-collapsed');
-    });
+    let copyFeedbackTimer = 0;
 
-    copyLinkBtn.addEventListener('click', async () => {
+    async function copyViewerLink() {
       const currentUrl = window.location.href;
       try {
         await navigator.clipboard.writeText(currentUrl);
-        copyLinkBtn.textContent = '已复制';
-        setTimeout(() => {
-          copyLinkBtn.textContent = '复制链接';
-        }, 1200);
       } catch {
         window.prompt('复制这个链接', currentUrl);
+        return;
+      }
+
+      window.clearTimeout(copyFeedbackTimer);
+      copyFeedbackEl.textContent = '已复制链接';
+      copyFeedbackEl.classList.add('is-visible');
+      copyFeedbackTimer = window.setTimeout(() => {
+        copyFeedbackEl.classList.remove('is-visible');
+      }, 1800);
+    }
+
+    titleEl.addEventListener('click', copyViewerLink);
+    titleEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        copyViewerLink();
       }
     });
 

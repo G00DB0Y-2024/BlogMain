@@ -114,16 +114,18 @@
       const rootLine = document.querySelector('.tree-root-line');
       const treeWrap = document.querySelector('.tree-wrap');
       if (!rootLine || !treeWrap) return;
-      const treeWidth = Math.max(treeWrap.clientWidth, treeEl.scrollWidth);
-      rootLine.style.width = `${treeWidth}px`;
+      const contentWidth = Math.max(treeEl.scrollWidth, treeWrap.clientWidth);
+      rootLine.style.width = `${contentWidth}px`;
+      rootLine.style.minWidth = `${contentWidth}px`;
     }
 
     function bindTreeResize() {
-      treeEl.querySelectorAll('details').forEach((details) => {
-        details.addEventListener('toggle', () => {
+      treeEl.addEventListener('toggle', () => {
+        requestAnimationFrame(() => {
+          syncRootLineWidth();
           requestAnimationFrame(syncRootLineWidth);
         });
-      });
+      }, true);
     }
 
     async function init() {
@@ -144,7 +146,7 @@
 
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
-        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-root-title tree-node-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-root-title tree-node-title">${rootName}</span><span class="tree-node-meta root-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
         requestAnimationFrame(syncRootLineWidth);
         bindTreeResize();
         window.addEventListener('resize', syncRootLineWidth);

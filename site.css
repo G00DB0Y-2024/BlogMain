@@ -839,6 +839,7 @@ details[open] > ul {
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-x: contain;
+    padding-right: 0;
   }
 
   .tree-wrap::-webkit-scrollbar {
@@ -857,6 +858,10 @@ details[open] > ul {
   .tree-root-line {
     min-width: 100%;
     width: 100% !important;
+  }
+
+  .tree-root-line .root-meta {
+    display: none;
   }
 
   .tree-item {

@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
+CONTENT_ROOT = ROOT / 'notes'
 MANIFEST_PATH = ROOT / 'manifest.json'
 EXCLUDED_DIRS = {'.git', 'node_modules', 'scripts', 'vendor'}
 EXCLUDED_FILES = {'manifest.json'}
@@ -93,10 +94,10 @@ def walk(root: DirNode, current_dir: Path, rel_dir: Path = Path()) -> None:
     for entry in sorted(current_dir.iterdir(), key=lambda p: p.name.lower()):
         is_root_assets = not rel_dir.parts and entry.is_dir() and entry.name == 'assets'
         if entry.is_dir():
-          if should_skip_dir(entry.name, is_root_assets):
-              continue
-          walk(root, entry, rel_dir / entry.name)
-          continue
+            if should_skip_dir(entry.name, is_root_assets):
+                continue
+            walk(root, entry, rel_dir / entry.name)
+            continue
         if entry.is_file() and not should_skip_file(entry.name):
             add_file(root, rel_dir / entry.name, entry)
 
@@ -170,8 +171,8 @@ def auto_push(commit_message: str) -> None:
 
 
 def build_manifest() -> dict:
-    root = DirNode(type='directory', name='BlogMain', path='')
-    walk(root, ROOT)
+    root = DirNode(type='directory', name='notes', path='')
+    walk(root, CONTENT_ROOT)
     sort_nodes(root.children)
     total_posts, _ = summarize(root)
     tree = [to_manifest(child) for child in root.children]
@@ -181,6 +182,7 @@ def build_manifest() -> dict:
     return {
         'generatedAt': datetime.now().astimezone().isoformat(),
         'rootName': root.name,
+        'contentRoot': 'notes',
         'totalPosts': total_posts,
         'totalCategories': total_categories,
         'latestUpdatedAt': latest[:10] if latest else None,

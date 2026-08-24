@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'index.html'
+      - 'viewer.html'
+      - 'site.css'
+      - 'main.css'
+      - 'manifest.json'
+      - 'assets/**'
+      - 'notes/**'
+      - 'scripts/**'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:

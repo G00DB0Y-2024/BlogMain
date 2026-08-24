@@ -118,6 +118,14 @@
       rootLine.style.width = `${treeWidth}px`;
     }
 
+    function bindTreeResize() {
+      treeEl.querySelectorAll('details').forEach((details) => {
+        details.addEventListener('toggle', () => {
+          requestAnimationFrame(syncRootLineWidth);
+        });
+      });
+    }
+
     async function init() {
       try {
         const response = await fetch('./manifest.json', { cache: 'no-cache' });
@@ -138,6 +146,7 @@
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
         treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-node-title tree-root-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
         requestAnimationFrame(syncRootLineWidth);
+        bindTreeResize();
         window.addEventListener('resize', syncRootLineWidth);
       } catch (error) {
         treeEl.innerHTML = `<div class="tree-empty">无法读取目录索引：${escapeHtml(error.message)}</div>`;

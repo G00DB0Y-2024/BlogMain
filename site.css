@@ -857,7 +857,15 @@ details[open] > ul {
   }
 
   .tree-node-meta {
-    font-size: 0.78rem;
+    order: -1;
+    margin-left: 0;
+    margin-right: 10px;
+    flex: 0 0 auto;
+    text-align: left;
+  }
+
+  .tree-title-scroll {
+    order: 1;
   }
 
   .viewer-page {

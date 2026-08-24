@@ -372,26 +372,27 @@
       }
     }
 
-    function scrollActiveTocIntoView(activeLink, mode = 'top') {
+    function scrollActiveTocIntoView(activeLink, mode = 'threshold') {
       if (!activeLink) return;
       const panelRect = tocPanelEl.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
       const currentScroll = tocPanelEl.scrollTop;
       const relativeTop = linkRect.top - panelRect.top + currentScroll;
       const maxScroll = tocPanelEl.scrollHeight - tocPanelEl.clientHeight;
-      const topPadding = 20;
 
       if (mode === 'top') {
+        const topPadding = 20;
         tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
         return;
       }
 
-      const padding = 12;
-      const isAbove = linkRect.top < panelRect.top + padding;
-      const isBelow = linkRect.bottom > panelRect.bottom - padding;
-      if (!isAbove && !isBelow) return;
+      const panelMiddle = panelRect.top + panelRect.height / 2;
+      const linkMiddle = linkRect.top + linkRect.height / 2;
+      const threshold = 20;
+      if (Math.abs(linkMiddle - panelMiddle) <= threshold) return;
 
-      tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
+      const centeredTop = relativeTop - tocPanelEl.clientHeight / 2 + activeLink.offsetHeight / 2;
+      tocPanelEl.scrollTo({ top: Math.min(Math.max(centeredTop, 0), maxScroll), behavior: 'smooth' });
     }
 
     function updateActiveToc() {
@@ -420,7 +421,9 @@
         link.classList.toggle('is-active', isActive);
         if (isActive) activeLink = link;
       });
-      scrollActiveTocIntoView(activeLink);
+      if (window.scrollY > 2) {
+        scrollActiveTocIntoView(activeLink, 'threshold');
+      }
     }
 
     function scheduleActiveTocUpdate() {

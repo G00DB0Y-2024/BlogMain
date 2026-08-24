@@ -85,12 +85,19 @@
       });
     }
 
+    function normalizeLatexContent(content) {
+      return String(content)
+        .replace(/_\s*\{\s*\\?((?:max|min|argmax|argmin|sup|inf))\s*\}/g, '_{\\text{$1}}')
+        .replace(/_\s*\\((?:max|min|argmax|argmin|sup|inf)\b)/g, (_, symbol) => `_{\\text{${symbol.slice(1)}}}`)
+        .replace(/_\s*((?:max|min|argmax|argmin|sup|inf)\b)/g, (_, symbol) => `_{\\text{${symbol}}}`);
+    }
+
     function renderKatex(content, displayMode) {
       const katex = window.katex;
       if (!katex) {
         throw new Error('katex 未加载');
       }
-      return katex.renderToString(content, {
+      return katex.renderToString(normalizeLatexContent(content), {
         displayMode,
         throwOnError: false,
         strict: 'ignore',

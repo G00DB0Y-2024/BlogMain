@@ -525,16 +525,31 @@ details[open] > ul {
 
 #write .math-display {
   margin: 1rem 0;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
   white-space: normal;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#write .math-display::-webkit-scrollbar {
+  display: none;
+}
+
+#write .math-display > .katex-display {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
 }
 
 #write .math-display mjx-container,
 #write mjx-container[display="true"] {
   display: block !important;
+  width: max-content;
+  min-width: 100%;
   text-align: center;
   overflow: visible !important;
-  max-width: 100%;
+  max-width: none;
   height: auto !important;
 }
 
@@ -773,7 +788,11 @@ details[open] > ul {
   }
 
   .profile-cover {
-    height: 210px;
+    display: none;
+  }
+
+  .profile-card {
+    gap: 12px;
   }
 
   .stats {
@@ -783,6 +802,38 @@ details[open] > ul {
   .tree {
     font-size: 0.88rem;
     padding: 14px 10px 16px;
+  }
+
+  .tree-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tree-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .file-tree {
+    min-width: max-content;
+    padding-right: 24px;
+  }
+
+  .tree-root-line {
+    min-width: 100%;
+    width: max-content;
+  }
+
+  .tree-item {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .tree-node-title {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
   }
 
   .tree-node-meta {

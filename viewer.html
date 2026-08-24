@@ -380,27 +380,15 @@
       }
     }
 
-    function scrollActiveTocIntoView(activeLink, mode = 'threshold') {
+    function scrollActiveTocIntoView(activeLink) {
       if (!activeLink) return;
       const panelRect = tocPanelEl.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
       const currentScroll = tocPanelEl.scrollTop;
       const relativeTop = linkRect.top - panelRect.top + currentScroll;
       const maxScroll = tocPanelEl.scrollHeight - tocPanelEl.clientHeight;
-
-      if (mode === 'top') {
-        const topPadding = 20;
-        tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
-        return;
-      }
-
-      const panelMiddle = panelRect.top + panelRect.height / 2;
-      const linkMiddle = linkRect.top + linkRect.height / 2;
-      const threshold = 20;
-      if (Math.abs(linkMiddle - panelMiddle) <= threshold) return;
-
-      const centeredTop = relativeTop - tocPanelEl.clientHeight / 2 + activeLink.offsetHeight / 2;
-      tocPanelEl.scrollTo({ top: Math.min(Math.max(centeredTop, 0), maxScroll), behavior: 'smooth' });
+      const topPadding = 20;
+      tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
     }
 
     function updateActiveToc() {
@@ -431,7 +419,7 @@
       });
       forceTocTopAtPageStart();
       if (window.scrollY > 2 && tocSyncMode === 'scroll') {
-        scrollActiveTocIntoView(activeLink, 'threshold');
+        scrollActiveTocIntoView(activeLink);
       }
     }
 
@@ -530,7 +518,7 @@
       tocSyncMode = 'click';
       window.clearTimeout(tocSyncModeTimer);
       scrollToHeading(target);
-      scrollActiveTocIntoView(link, 'top');
+      scrollActiveTocIntoView(link);
       tocSyncModeTimer = window.setTimeout(() => {
         tocSyncMode = 'scroll';
         scheduleActiveTocUpdate();

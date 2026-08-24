@@ -46,6 +46,10 @@ body.viewer-page {
   background: #f6f7fb;
 }
 
+.viewer-page {
+  scroll-behavior: smooth;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -534,7 +538,7 @@ textarea {
 
 .toc-panel {
   position: fixed;
-  top: 76px;
+  top: 104px;
   right: max(14px, calc((100vw - 1320px) / 2 + 14px));
   z-index: 20;
   width: 286px;
@@ -548,7 +552,9 @@ textarea {
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(122, 167, 255, 0.22) transparent;
+  scrollbar-color: rgba(122, 167, 255, 0.18) transparent;
+  transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
+  will-change: transform;
 }
 
 .toc-panel::-webkit-scrollbar {
@@ -604,6 +610,7 @@ textarea {
   word-break: break-word;
   max-width: 100%;
   min-width: 0;
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .toc-link:hover,

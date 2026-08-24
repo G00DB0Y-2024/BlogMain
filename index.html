@@ -89,7 +89,7 @@
       const meta = escapeHtml(metaText(node));
       const children = Array.isArray(node.children) ? node.children : [];
       const openAttr = depth <= 0 ? ' open' : '';
-      return `<li><details${openAttr}><summary><div class="tree-item directory-item" role="treeitem" aria-label="${title}"><span class="arrow" aria-hidden="true">▶</span><span class="icon" aria-hidden="true">▰</span><span class="tree-node-title">${title}</span><span class="tree-node-meta">${meta}</span></div></summary>${renderNodes(children, depth + 1)}</details></li>`;
+      return `<li><details${openAttr}><summary><div class="tree-item directory-item" role="treeitem" aria-label="${title}"><span class="arrow" aria-hidden="true">▶</span><span class="tree-node-title">${title}</span><span class="tree-node-meta">${meta}</span></div></summary>${renderNodes(children, depth + 1)}</details></li>`;
     }
 
     function renderFile(node) {
@@ -128,7 +128,7 @@
 
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
-        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="icon" aria-hidden="true">▰</span><span class="tree-node-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-node-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
       } catch (error) {
         treeEl.innerHTML = `<div class="tree-empty">无法读取目录索引：${escapeHtml(error.message)}</div>`;
       }

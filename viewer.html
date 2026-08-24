@@ -243,13 +243,28 @@
         .replace(/-+/g, '-');
     }
 
+    function getTocHeadings(root) {
+      const allHeadings = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const existingLevels = [...new Set(allHeadings.map((heading) => Number(heading.tagName.slice(1))))]
+        .sort((a, b) => a - b)
+        .slice(0, 3);
+      const levelRank = new Map(existingLevels.map((level, index) => [level, index]));
+
+      return allHeadings
+        .filter((heading) => levelRank.has(Number(heading.tagName.slice(1))))
+        .map((heading) => ({
+          heading,
+          level: Number(heading.tagName.slice(1)),
+          rank: levelRank.get(Number(heading.tagName.slice(1))) ?? 0,
+        }));
+    }
+
     function buildToc(root) {
-      const headings = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const headings = getTocHeadings(root);
       const usedIds = new Map();
       const items = [];
 
-      headings.forEach((heading) => {
-        const level = Number(heading.tagName.slice(1));
+      headings.forEach(({ heading, level, rank }) => {
         const text = heading.textContent.trim();
         if (!text) return;
 
@@ -261,7 +276,7 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, html: heading.innerHTML, id });
+        items.push({ level, rank, html: heading.innerHTML, id });
       });
 
       if (!items.length) {
@@ -272,9 +287,8 @@
 
       tocPanelEl.classList.remove('is-empty');
       tocListEl.innerHTML = items.map((item) => {
-        const indent = Math.max(0, item.level - 1);
         return `
-          <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${indent}">
+          <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${item.rank}">
             <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
@@ -357,25 +371,35 @@
       }
     }
 
+    function scrollActiveTocIntoView(activeLink) {
+      if (!activeLink) return;
+      const panelRect = tocPanelEl.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      const offset = linkRect.top - panelRect.top + tocPanelEl.scrollTop;
+      tocPanelEl.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+
     function updateActiveToc() {
-      const headings = Array.from(writeEl.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const headings = getTocHeadings(writeEl).map((item) => item.heading);
       const tocLinks = Array.from(tocListEl.querySelectorAll('.toc-link'));
       if (!headings.length || !tocLinks.length) return;
 
-      const viewportTop = 132;
       let activeId = headings[0].id;
-
       for (const heading of headings) {
         const rect = heading.getBoundingClientRect();
-        if (rect.top - viewportTop <= 0) {
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
           activeId = heading.id;
+          break;
         }
       }
 
+      let activeLink = null;
       tocLinks.forEach((link) => {
         const isActive = link.dataset.headingId === activeId;
         link.classList.toggle('is-active', isActive);
+        if (isActive) activeLink = link;
       });
+      scrollActiveTocIntoView(activeLink);
     }
 
     function scheduleActiveTocUpdate() {
@@ -461,6 +485,7 @@
       event.preventDefault();
       window.history.pushState(null, '', `#${encodeURIComponent(targetId)}`);
       target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      scrollActiveTocIntoView(link);
       window.setTimeout(scheduleActiveTocUpdate, 180);
     });
 

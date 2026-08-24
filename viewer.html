@@ -30,15 +30,32 @@
   <div class="viewer-shell">
     <div class="viewer-card">
       <div class="viewer-bar">
-        <div>
+        <div class="viewer-bar-left">
           <a class="back-link" href="./index.html">← 首页</a>
+          <span class="viewer-separator" aria-hidden="true">·</span>
+          <span class="viewer-title" id="viewer-title">Article</span>
         </div>
         <div class="viewer-status" id="viewer-status">Loading…</div>
       </div>
-      <div class="viewer-content">
-        <main id="write" aria-label="文章内容">
-          <div class="viewer-error">正在加载文章…</div>
+
+      <div class="viewer-layout">
+        <main class="viewer-content">
+          <div class="viewer-toolbar">
+            <button class="viewer-button" id="copy-link" type="button">复制链接</button>
+            <button class="viewer-button" id="toggle-toc" type="button">目录</button>
+          </div>
+          <main id="write" aria-label="文章内容">
+            <div class="viewer-error">正在加载文章…</div>
+          </main>
         </main>
+
+        <aside class="toc-panel panel" id="toc-panel" aria-label="文章目录">
+          <div class="toc-header">
+            <h2 class="section-title">TOC</h2>
+            <p class="section-desc">文章目录</p>
+          </div>
+          <nav class="toc-list" id="toc-list"></nav>
+        </aside>
       </div>
     </div>
   </div>
@@ -48,8 +65,6 @@
       basename,
       escapeHtml,
       isAnchoredOrExternal,
-      joinPath,
-      normalizeSlashes,
       resolveAssetUrl,
       resolveFromSite,
       resolveMarkdownLink,
@@ -60,11 +75,16 @@
 
     const writeEl = document.querySelector('#write');
     const statusEl = document.querySelector('#viewer-status');
+    const titleEl = document.querySelector('#viewer-title');
+    const tocPanelEl = document.querySelector('#toc-panel');
+    const tocListEl = document.querySelector('#toc-list');
+    const toggleTocBtn = document.querySelector('#toggle-toc');
+    const copyLinkBtn = document.querySelector('#copy-link');
     const markdownUrl = new URL(window.location.href).searchParams.get('file');
 
     function getMarkdownPath() {
       const decoded = safeDecodeURIComponent(markdownUrl || '');
-      return stripLeadingSlashes(normalizeSlashes(decoded));
+      return stripLeadingSlashes(decoded.replace(/\\/g, '/'));
     }
 
     function createMarkdownIt() {
@@ -80,58 +100,144 @@
       });
     }
 
-    function rewriteRenderedDom(root, markdownPath) {
-      const selectorMap = [
-        ['img', 'src'],
-        ['a', 'href'],
-        ['source', 'src'],
-        ['video', 'src'],
-        ['audio', 'src'],
-      ];
-
-      for (const [tag, attr] of selectorMap) {
-        root.querySelectorAll(`${tag}[${attr}]`).forEach((element) => {
-          const original = element.getAttribute(attr);
-          if (!original || isAnchoredOrExternal(original)) return;
-
-          if (tag === 'a') {
-            const lower = original.toLowerCase();
-            if (lower.endsWith('.md')) {
-              element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(resolveMarkdownLink(markdownPath, original))}`);
-              element.setAttribute('target', '_blank');
-              element.setAttribute('rel', 'noopener noreferrer');
-              return;
-            }
-          }
-
-          element.setAttribute(attr, resolveAssetUrl(markdownPath, original));
-        });
+    function resolveLinkHref(markdownPath, href) {
+      const original = String(href || '').trim();
+      if (!original || isAnchoredOrExternal(original)) {
+        return original;
       }
+      const clean = original.split('#')[0].split('?')[0];
+      return resolveMarkdownLink(markdownPath, clean);
+    }
 
+    function setLinkedAnchors(root, markdownPath) {
       root.querySelectorAll('a[href]').forEach((element) => {
         const original = element.getAttribute('href') || '';
         if (!original || isAnchoredOrExternal(original)) return;
 
         if (original.toLowerCase().endsWith('.md')) {
-          const target = stripLeadingSlashes(normalizeSlashes(joinPath('', original)));
-          element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(target)}`);
+          const targetPath = resolveLinkHref(markdownPath, original);
+          element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
           element.setAttribute('target', '_blank');
           element.setAttribute('rel', 'noopener noreferrer');
+          return;
         }
+
+        element.setAttribute('href', resolveAssetUrl(markdownPath, original));
       });
     }
 
-    function applyTyporaLikeLayout(root) {
-      root.querySelectorAll('img').forEach((img) => {
-        img.loading = 'lazy';
+    function setLinkedAssets(root, markdownPath) {
+      const tags = [
+        ['img', 'src'],
+        ['source', 'src'],
+        ['video', 'src'],
+        ['audio', 'src'],
+      ];
+
+      for (const [tag, attr] of tags) {
+        root.querySelectorAll(`${tag}[${attr}]`).forEach((element) => {
+          const original = element.getAttribute(attr);
+          if (!original || isAnchoredOrExternal(original)) return;
+          element.setAttribute(attr, resolveAssetUrl(markdownPath, original));
+        });
+      }
+    }
+
+    function slugify(text) {
+      return String(text)
+        .trim()
+        .toLowerCase()
+        .replace(/['’"“”]/g, '')
+        .replace(/[^\w\u4e00-\u9fff\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    function buildToc(root) {
+      const headings = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const usedIds = new Map();
+      const items = [];
+
+      headings.forEach((heading) => {
+        const level = Number(heading.tagName.slice(1));
+        const text = heading.textContent.trim();
+        if (!text) return;
+
+        let id = heading.id || slugify(text) || `heading-${items.length + 1}`;
+        const count = usedIds.get(id) || 0;
+        if (count > 0) {
+          id = `${id}-${count + 1}`;
+        }
+        usedIds.set(id, count + 1);
+        heading.id = id;
+
+        items.push({ level, text, id });
       });
 
-      root.querySelectorAll('table').forEach((table) => {
+      if (!items.length) {
+        tocListEl.innerHTML = '<div class="toc-empty">当前文章没有标题</div>';
+        tocPanelEl.classList.add('is-empty');
+        return;
+      }
+
+      tocPanelEl.classList.remove('is-empty');
+      tocListEl.innerHTML = items.map((item) => {
+        const indent = Math.max(0, item.level - 1);
+        return `
+          <a class="toc-link level-${item.level}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${indent}">
+            <span class="toc-marker" aria-hidden="true"></span>
+            <span class="toc-text">${escapeHtml(item.text)}</span>
+          </a>`;
+      }).join('');
+    }
+
+    function enhanceCodeBlocks(root) {
+      root.querySelectorAll('pre > code').forEach((code) => {
+        const pre = code.parentElement;
+        if (!pre || pre.dataset.enhanced === 'true') return;
+        pre.dataset.enhanced = 'true';
+
         const wrapper = document.createElement('div');
-        wrapper.style.overflowX = 'auto';
-        wrapper.style.margin = '0.8em 0';
+        wrapper.className = 'code-frame';
+        const header = document.createElement('div');
+        header.className = 'code-frame-header';
+        header.innerHTML = '<span>code</span><span>markdown</span>';
+
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(header);
+        wrapper.appendChild(pre);
+      });
+    }
+
+    function enhanceTables(root) {
+      root.querySelectorAll('table').forEach((table) => {
+        if (table.parentElement?.classList.contains('table-scroll')) return;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-scroll';
         table.parentNode.insertBefore(wrapper, table);
         wrapper.appendChild(table);
+      });
+    }
+
+    function finalizeViewer(markdownPath) {
+      setLinkedAssets(writeEl, markdownPath);
+      setLinkedAnchors(writeEl, markdownPath);
+      enhanceCodeBlocks(writeEl);
+      enhanceTables(writeEl);
+      buildToc(writeEl);
+
+      const firstHeading = writeEl.querySelector('h1, h2, h3');
+      if (firstHeading) {
+        titleEl.textContent = firstHeading.textContent.trim();
+        document.title = `${firstHeading.textContent.trim()} · Typora Notes`;
+      }
+
+      requestAnimationFrame(() => {
+        const active = new URL(window.location.href).hash.replace(/^#/, '');
+        if (active) {
+          const target = document.getElementById(active);
+          target?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
       });
     }
 
@@ -152,6 +258,7 @@
         const markdownPath = getMarkdownPath();
         const title = removeExtension(basename(markdownPath)) || 'Untitled';
         document.title = `${title} · Typora Notes`;
+        titleEl.textContent = title;
         statusEl.textContent = markdownPath;
 
         const raw = await loadMarkdown(markdownPath);
@@ -172,7 +279,7 @@
           const token = tokens[idx];
           const href = token.attrGet('href') || '';
           if (href && !isAnchoredOrExternal(href) && href.toLowerCase().endsWith('.md')) {
-            const targetPath = resolveMarkdownLink(markdownPath, href);
+            const targetPath = resolveLinkHref(markdownPath, href);
             token.attrSet('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
             token.attrSet('target', '_blank');
             token.attrSet('rel', 'noopener noreferrer');
@@ -184,8 +291,7 @@
 
         const html = md.render(raw, { markdownPath });
         writeEl.innerHTML = html;
-        rewriteRenderedDom(writeEl, markdownPath);
-        applyTyporaLikeLayout(writeEl);
+        finalizeViewer(markdownPath);
 
         statusEl.textContent = 'Ready';
         if (window.MathJax?.typesetPromise) {
@@ -193,9 +299,27 @@
         }
       } catch (error) {
         writeEl.innerHTML = `<div class="viewer-error">${escapeHtml(error.message)}</div>`;
+        tocListEl.innerHTML = '<div class="toc-empty">目录不可用</div>';
         statusEl.textContent = 'Failed';
       }
     }
+
+    toggleTocBtn.addEventListener('click', () => {
+      tocPanelEl.classList.toggle('is-collapsed');
+    });
+
+    copyLinkBtn.addEventListener('click', async () => {
+      const currentUrl = window.location.href;
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        copyLinkBtn.textContent = '已复制';
+        setTimeout(() => {
+          copyLinkBtn.textContent = '复制链接';
+        }, 1200);
+      } catch {
+        window.prompt('复制这个链接', currentUrl);
+      }
+    });
 
     render();
   </script>

@@ -333,7 +333,7 @@ textarea {
 }
 
 .viewer-shell {
-  width: min(980px, calc(100vw - 24px));
+  width: min(1320px, calc(100vw - 24px));
   margin: 18px auto 30px;
 }
 
@@ -355,7 +355,27 @@ textarea {
   background: linear-gradient(180deg, rgba(248, 250, 255, 0.98), rgba(243, 246, 252, 0.92));
 }
 
-.viewer-bar .back-link {
+.viewer-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.viewer-separator {
+  color: var(--text-muted);
+}
+
+.viewer-title {
+  max-width: 56vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.back-link {
   color: var(--accent-strong);
   font-weight: 600;
 }
@@ -363,15 +383,205 @@ textarea {
 .viewer-status {
   color: var(--text-muted);
   font-size: 0.88rem;
+  text-align: right;
+}
+
+.viewer-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 0;
+  align-items: start;
 }
 
 .viewer-content {
+  min-width: 0;
   padding: 0;
+}
+
+.viewer-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px 0;
+}
+
+.viewer-button {
+  border: 1px solid rgba(122, 167, 255, 0.18);
+  background: rgba(122, 167, 255, 0.08);
+  color: #2c4c9a;
+  border-radius: 999px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.viewer-button:hover {
+  background: rgba(122, 167, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+#write {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  background: transparent;
+}
+
+#write img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+#write pre {
+  overflow: auto;
+}
+
+#write pre,
+#write code,
+#write tt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+#write pre {
+  margin: 1em 0;
+  padding: 0;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: 16px;
+  background: #f8fafc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+#write pre > code {
+  display: block;
+  padding: 16px 18px;
+  background: transparent;
+  border: 0;
+  white-space: pre;
+}
+
+.code-frame {
+  margin: 1em 0;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.code-frame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #edf3ff, #e7efff);
+  color: #41506b;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+#write blockquote {
+  border-left: 4px solid rgba(122, 167, 255, 0.7);
+  color: #556070;
+  background: rgba(122, 167, 255, 0.06);
+  border-radius: 0 12px 12px 0;
+  padding: 0.6em 1em;
+}
+
+#write table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#write th,
+#write td {
+  border: 1px solid #dbe3ef;
+  padding: 8px 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0.8em 0;
+}
+
+.viewer-card .math.inline {
+  white-space: nowrap;
 }
 
 .viewer-error {
   padding: 22px;
   color: #b42318;
+}
+
+.toc-panel {
+  position: sticky;
+  top: 12px;
+  margin: 14px 14px 14px 0;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(20, 32, 55, 0.08);
+  background: rgba(249, 251, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+}
+
+.toc-panel.is-collapsed {
+  display: none;
+}
+
+.toc-header {
+  margin-bottom: 12px;
+}
+
+.toc-list {
+  display: grid;
+  gap: 4px;
+}
+
+.toc-empty {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.toc-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  transform: translateX(calc(var(--toc-indent, 0) * 12px));
+}
+
+.toc-link:hover {
+  background: rgba(122, 167, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.toc-marker {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(122, 167, 255, 0.7);
+  flex: 0 0 auto;
+}
+
+.toc-text {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1180px) {
+  .viewer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: relative;
+    top: auto;
+    margin: 0 14px 14px;
+    max-height: none;
+  }
 }
 
 @media (max-width: 980px) {
@@ -436,5 +646,17 @@ textarea {
     padding: 14px 16px;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .viewer-title {
+    max-width: 100%;
+  }
+
+  .viewer-toolbar {
+    padding: 12px 16px 0;
+  }
+
+  #write {
+    padding: 20px 16px 70px;
   }
 }

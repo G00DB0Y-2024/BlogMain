@@ -289,9 +289,9 @@ textarea {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   padding: 7px 8px;
   margin-bottom: 6px;
-  border-radius: 10px;
   color: #24324b;
   font-weight: 700;
   background: rgba(122, 167, 255, 0.08);
@@ -380,20 +380,37 @@ details[open] > summary .arrow {
   color: #b8c5d8;
 }
 
-.tree-node-title {
+.tree-title-scroll {
   flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-right: 12px;
+}
+
+.tree-title-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tree-node-title {
+  display: inline-block;
+  min-width: max-content;
   white-space: nowrap;
 }
 
 .tree-node-meta {
+  position: sticky;
+  right: 0;
+  z-index: 2;
   flex: 0 0 auto;
   margin-left: auto;
+  padding: 2px 4px 2px 8px;
   color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 500;
+  background: rgba(246, 248, 252, 0.98);
 }
 
 details[open] > ul {
@@ -830,10 +847,8 @@ details[open] > ul {
     min-width: 100%;
   }
 
-  .tree-node-title {
-    overflow: visible;
-    text-overflow: clip;
-    white-space: nowrap;
+  .tree-title-scroll {
+    max-width: calc(100vw - 116px);
   }
 
   .tree-node-meta {

@@ -489,6 +489,12 @@ details[open] > ul {
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.viewer-title:hover,
+.viewer-title:focus-visible {
+  color: var(--accent-strong);
 }
 
 .copy-feedback {

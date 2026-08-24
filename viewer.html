@@ -370,7 +370,7 @@
 
     function forceTocTopAtPageStart() {
       if (window.scrollY <= 2 && tocPanelEl.scrollTop !== 0) {
-        tocPanelEl.scrollTo({ top: 0, behavior: 'smooth' });
+        tocPanelEl.scrollTop = 0;
       }
     }
 
@@ -493,6 +493,7 @@
     }, { passive: true });
 
     window.addEventListener('resize', scheduleTocMotion);
+    window.addEventListener('scroll', forceTocTopAtPageStart, { passive: true });
 
     function scrollToHeading(target) {
       const pageOffset = 24;

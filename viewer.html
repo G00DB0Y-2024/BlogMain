@@ -7,24 +7,10 @@
   <title>Article Viewer</title>
   <link rel="stylesheet" href="./site.css">
   <link rel="stylesheet" href="./main.css">
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true,
-        processEnvironments: true
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      startup: {
-        typeset: false
-      }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@0.9.0/texmath.min.js"></script>
 </head>
 <body class="viewer-page">
   <div class="viewer-shell">
@@ -44,9 +30,9 @@
             <button class="viewer-button" id="copy-link" type="button">复制链接</button>
             <button class="viewer-button" id="toggle-toc" type="button">目录</button>
           </div>
-          <main id="write" aria-label="文章内容">
+          <article id="write" aria-label="文章内容">
             <div class="viewer-error">正在加载文章…</div>
-          </main>
+          </article>
         </main>
 
         <aside class="toc-panel panel" id="toc-panel" aria-label="文章目录">
@@ -89,15 +75,29 @@
 
     function createMarkdownIt() {
       const markdownit = window.markdownit;
+      const texmath = window.texmath || window.markdownitTexmath || window.markdownitTexMath;
+      const katex = window.katex;
+
       if (!markdownit) {
         throw new Error('markdown-it 未加载');
       }
-      return markdownit({
+      if (!texmath) {
+        throw new Error('texmath 未加载');
+      }
+      if (!katex) {
+        throw new Error('katex 未加载');
+      }
+
+      const md = markdownit({
         html: true,
         linkify: true,
         breaks: true,
         typographer: true,
       });
+
+      md.use(texmath, { engine: katex, delimiters: 'dollars' });
+      md.use(texmath, { engine: katex, delimiters: 'brackets' });
+      return md;
     }
 
     function resolveLinkHref(markdownPath, href) {
@@ -107,61 +107,6 @@
       }
       const clean = original.split('#')[0].split('?')[0];
       return resolveMarkdownLink(markdownPath, clean);
-    }
-
-    function escapeMathContent(content) {
-      return escapeHtml(String(content).trim());
-    }
-
-    function protectMarkdownCode(source) {
-      const stash = [];
-      const push = (match) => {
-        const token = `@@PROTECTED_${stash.length}@@`;
-        stash.push(match);
-        return token;
-      };
-
-      let text = source;
-      text = text.replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, push);
-      text = text.replace(/`[^`\n]+`/g, push);
-
-      return {
-        text,
-        restore(value) {
-          return String(value).replace(/@@PROTECTED_(\d+)@@/g, (_, index) => stash[Number(index)] ?? '');
-        },
-      };
-    }
-
-    function normalizeLatexEscapes(source) {
-      return String(source)
-        .replace(/\\\(/g, '\\(')
-        .replace(/\\\)/g, '\\)')
-        .replace(/\\\[/g, '\\[')
-        .replace(/\\\]/g, '\\]');
-    }
-
-    function convertMathSyntax(source) {
-      const protectedSource = protectMarkdownCode(source);
-      let text = normalizeLatexEscapes(protectedSource.text);
-
-      text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
-        return `\n\n<div class="math-display">\\[${escapeMathContent(content)}\\]</div>\n\n`;
-      });
-
-      text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, content) => {
-        return `<span class="math-inline">\\(${escapeMathContent(content)}\\)</span>`;
-      });
-
-      text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
-        return `\n\n<div class="math-display">\\[${escapeMathContent(content)}\\]</div>\n\n`;
-      });
-
-      text = text.replace(/(?<!\\)\$(?!\s)([^\n$]+?)(?<!\s)\$(?!\$)/g, (_, content) => {
-        return `<span class="math-inline">\\(${escapeMathContent(content)}\\)</span>`;
-      });
-
-      return protectedSource.restore(text);
     }
 
     function setLinkedAnchors(root, markdownPath) {
@@ -226,20 +171,8 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({
-          level,
-          text,
-          id,
-          html: heading.innerHTML,
-          source: heading.textContent,
-        });
+        items.push({ level, text, id, html: heading.innerHTML });
       });
-
-      const renderLatexInToc = (container) => {
-        if (window.MathJax?.typesetPromise) {
-          window.MathJax.typesetPromise([container]).catch(() => {});
-        }
-      };
 
       if (!items.length) {
         tocListEl.innerHTML = '<div class="toc-empty">当前文章没有标题</div>';
@@ -313,7 +246,7 @@
         throw new Error('缺少 file 参数');
       }
 
-      const response = await fetch(`./${encodeURI(markdownPath)}`, { cache: 'no-cache' });
+      const response = await fetch(resolveFromSite(markdownPath), { cache: 'no-cache' });
       if (!response.ok) {
         throw new Error(`无法加载文章：${response.status}`);
       }
@@ -328,42 +261,14 @@
         titleEl.textContent = title;
         statusEl.textContent = markdownPath;
 
-        const raw = convertMathSyntax(await loadMarkdown(markdownPath));
+        const raw = await loadMarkdown(markdownPath);
         const md = createMarkdownIt();
-
-        md.renderer.rules.image = function (tokens, idx, options, env, self) {
-          const token = tokens[idx];
-          const src = token.attrGet('src') || '';
-          const alt = token.content || '';
-          const titleAttr = token.attrGet('title');
-          const resolvedSrc = resolveAssetUrl(markdownPath, src);
-          const attrs = [`src="${escapeHtml(resolvedSrc)}"`, `alt="${escapeHtml(alt)}"`];
-          if (titleAttr) attrs.push(`title="${escapeHtml(titleAttr)}"`);
-          return `<img ${attrs.join(' ')}>`;
-        };
-
-        md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-          const token = tokens[idx];
-          const href = token.attrGet('href') || '';
-          if (href && !isAnchoredOrExternal(href) && href.toLowerCase().endsWith('.md')) {
-            const targetPath = resolveLinkHref(markdownPath, href);
-            token.attrSet('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
-            token.attrSet('target', '_blank');
-            token.attrSet('rel', 'noopener noreferrer');
-          } else if (href && !isAnchoredOrExternal(href)) {
-            token.attrSet('href', resolveAssetUrl(markdownPath, href));
-          }
-          return self.renderToken(tokens, idx, options);
-        };
 
         const html = md.render(raw, { markdownPath });
         writeEl.innerHTML = html;
         finalizeViewer(markdownPath);
 
         statusEl.textContent = 'Ready';
-        if (window.MathJax?.typesetPromise) {
-          await window.MathJax.typesetPromise([writeEl, tocPanelEl]);
-        }
       } catch (error) {
         writeEl.innerHTML = `<div class="viewer-error">${escapeHtml(error.message)}</div>`;
         tocListEl.innerHTML = '<div class="toc-empty">目录不可用</div>';

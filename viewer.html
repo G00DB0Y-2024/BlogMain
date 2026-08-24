@@ -133,9 +133,25 @@
       };
     }
 
+    function normalizeLatexEscapes(source) {
+      return String(source)
+        .replace(/\\\(/g, '\\(')
+        .replace(/\\\)/g, '\\)')
+        .replace(/\\\[/g, '\\[')
+        .replace(/\\\]/g, '\\]');
+    }
+
     function convertMathSyntax(source) {
       const protectedSource = protectMarkdownCode(source);
-      let text = protectedSource.text;
+      let text = normalizeLatexEscapes(protectedSource.text);
+
+      text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
+        return `\n\n<div class="math-display">\\[${escapeMathContent(content)}\\]</div>\n\n`;
+      });
+
+      text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, content) => {
+        return `<span class="math-inline">\\(${escapeMathContent(content)}\\)</span>`;
+      });
 
       text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
         return `\n\n<div class="math-display">\\[${escapeMathContent(content)}\\]</div>\n\n`;

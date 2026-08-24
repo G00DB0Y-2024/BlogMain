@@ -263,61 +263,108 @@ textarea {
 
 .tree {
   margin: 0;
-  padding: 16px 14px 18px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: 0.93rem;
-  line-height: 1.8;
+  padding: 14px;
   color: #334155;
-  white-space: pre;
 }
 
-.tree-line {
+.tree-root-line {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
-  padding: 2px 8px;
+  padding: 7px 8px;
+  margin-bottom: 6px;
   border-radius: 10px;
-  transition: background-color 0.15s ease, transform 0.15s ease;
+  color: #24324b;
+  font-weight: 700;
+  background: rgba(122, 167, 255, 0.08);
 }
 
-.tree-line:hover {
-  background: rgba(122, 167, 255, 0.08);
+ul.file-tree,
+ul.file-tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.file-tree ul {
+  padding-left: 20px;
+}
+
+.file-tree li {
+  margin: 2px 0;
+}
+
+details > summary {
+  list-style: none;
+  outline: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 9px;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.tree-item:hover {
+  background: rgba(122, 167, 255, 0.1);
+  color: #1f2937;
   transform: translateX(2px);
 }
 
-.tree-symbol {
+.directory-item {
+  font-weight: 650;
+  color: #26354f;
+}
+
+.file-item {
+  color: #475569;
+}
+
+.arrow {
+  display: inline-block;
+  flex: 0 0 16px;
+  width: 16px;
+  color: #94a3b8;
+  font-size: 0.66rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+details[open] > summary .arrow {
+  transform: rotate(90deg);
+}
+
+.file-item > .arrow {
+  visibility: hidden;
+}
+
+.icon {
   flex: 0 0 auto;
-  color: #8aa4d6;
+  color: #88a9e8;
+  font-size: 0.86rem;
+  margin-right: 1px;
 }
 
-.tree-indent {
-  flex: 0 0 auto;
-  white-space: pre;
-  color: #c3cfdf;
-}
-
-.tree-node {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.tree-node.is-directory {
-  color: #24324b;
-  font-weight: 600;
-}
-
-.tree-node.is-file {
-  color: #1f2937;
-}
-
-.tree-node a {
-  color: inherit;
+.file-item .icon {
+  color: #b8c5d8;
 }
 
 .tree-node-title {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -327,7 +374,24 @@ textarea {
   flex: 0 0 auto;
   margin-left: auto;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+details[open] > ul {
+  animation: slideDownFade 0.24s ease-out forwards;
+  transform-origin: top;
+}
+
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tree-empty {

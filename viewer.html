@@ -336,6 +336,8 @@
 
     let tocRaf = 0;
     let activeTocId = null;
+    let tocSyncMode = 'scroll';
+    let tocSyncModeTimer = 0;
 
     function getViewerPageTop() {
       const page = document.querySelector('.viewer-page');
@@ -369,6 +371,12 @@
       tocMotion.targetY = computeTocTargetY();
       if (!tocMotion.raf) {
         tocMotion.raf = window.requestAnimationFrame(animateTocPosition);
+      }
+    }
+
+    function forceTocTopAtPageStart() {
+      if (window.scrollY <= 2 && tocPanelEl.scrollTop !== 0) {
+        tocPanelEl.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
@@ -421,7 +429,8 @@
         link.classList.toggle('is-active', isActive);
         if (isActive) activeLink = link;
       });
-      if (window.scrollY > 2) {
+      forceTocTopAtPageStart();
+      if (window.scrollY > 2 && tocSyncMode === 'scroll') {
         scrollActiveTocIntoView(activeLink, 'threshold');
       }
     }
@@ -509,9 +518,14 @@
       if (!target) return;
       event.preventDefault();
       window.history.pushState(null, '', `#${encodeURIComponent(targetId)}`);
+      tocSyncMode = 'click';
+      window.clearTimeout(tocSyncModeTimer);
       target.scrollIntoView({ block: 'start', behavior: 'smooth' });
       scrollActiveTocIntoView(link, 'top');
-      window.setTimeout(scheduleActiveTocUpdate, 180);
+      tocSyncModeTimer = window.setTimeout(() => {
+        tocSyncMode = 'scroll';
+        scheduleActiveTocUpdate();
+      }, 700);
     });
 
     toggleTocBtn.addEventListener('click', () => {

@@ -8,7 +8,7 @@ on:
       - 'index.html'
       - 'viewer.html'
       - 'site.css'
-      - 'main.css'
+      - 'inkwell.css'
       - 'manifest.json'
       - 'assets/**'
       - 'notes/**'

@@ -1,60 +1,112 @@
+:root {
+  --ink-bg: #ffffff;
+  --ink-text: #3d4852;
+  --ink-heading: #1a2332;
+  --ink-heading-secondary: #2c3e50;
+  --ink-link: #3b82c4;
+  --ink-link-hover: #2563a0;
+  --ink-border: #e2e8f0;
+  --ink-border-light: #eef2f7;
+  --ink-code-bg: #f6f8fb;
+  --ink-code-text: #c7254e;
+  --ink-blockquote-bg: #f8fafc;
+  --ink-blockquote-border: #94a3b8;
+  --ink-blockquote-text: #5a6872;
+  --ink-meta: #8896a4;
+  --ink-hr: #d1d9e0;
+  --ink-shadow: rgba(0, 0, 0, 0.04);
+}
+
 .viewer-page {
-  background: #fefefe;
-  color: #333;
+  background: var(--ink-bg);
+  color: var(--ink-text);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.viewer-page .viewer-shell {
+  width: min(1080px, calc(100vw - 24px));
+  margin: 0 auto;
+}
+
+.viewer-page .viewer-card {
+  background: var(--ink-bg);
+  border: 1px solid var(--ink-border);
+  box-shadow: none;
+}
+
+.viewer-page .viewer-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--ink-border-light);
+}
+
+.viewer-page .viewer-title {
+  color: var(--ink-heading);
+  transition: color 0.1s ease;
+}
+
+.viewer-page .viewer-title:hover,
+.viewer-page .viewer-title:focus-visible {
+  color: var(--ink-link);
+}
+
+.viewer-page .copy-feedback {
+  color: var(--ink-link);
 }
 
 .viewer-page #write {
-  max-width: 960px;
+  max-width: 860px;
   margin: 0 auto 2em;
-  padding-top: 40px;
-  font-family: "Vollkorn", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", serif;
-  font-size: 19px;
-  line-height: 1.53;
-  color: #333;
-  text-align: justify;
+  padding: 2.2em 2.5em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink-text);
+  text-align: left;
+  background: #fff;
 }
 
 @media only screen and (min-width: 1400px) {
   .viewer-page #write {
-    max-width: 1100px;
+    max-width: 980px;
   }
 }
 
 .viewer-page #write > h1:first-child,
 .viewer-page #write h1 {
-  margin-top: 1.6em;
-  font-weight: normal;
+  margin-top: 1.2em;
+  font-weight: 700;
 }
 
 .viewer-page #write h1 {
-  font-size: 3em;
+  font-size: 2.1em;
+  color: var(--ink-heading);
+  padding-bottom: 0.35em;
+  border-bottom: 2px solid var(--ink-border);
+  letter-spacing: -0.02em;
 }
 
 .viewer-page #write h2 {
-  margin-top: 2em;
-  font-weight: normal;
+  margin-top: 1.8em;
+  font-size: 1.55em;
+  font-weight: 650;
+  color: var(--ink-heading-secondary);
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--ink-border-light);
 }
 
 .viewer-page #write h3 {
-  margin-top: 3em;
-  font-weight: normal;
+  margin-top: 2em;
+  font-size: 1.3em;
+  font-weight: 600;
   font-style: italic;
+  color: var(--ink-heading-secondary);
 }
 
 .viewer-page #write h1,
 .viewer-page #write h2,
 .viewer-page #write h3 {
   text-align: center;
-}
-
-.viewer-page #write h2::after {
-  content: "";
-  display: block;
-  width: 100px;
-  height: 1px;
-  margin: 0 auto;
-  border-bottom: 1px solid #2f2f2f;
 }
 
 .viewer-page #write h1 + h2,
@@ -68,59 +120,89 @@
   hyphens: auto;
 }
 
-.viewer-page #write ul {
-  list-style: square;
-  padding-left: 1.2em;
+.viewer-page #write ul,
+.viewer-page #write ol {
+  margin: 0 0 1em 0;
+  padding-left: 1.8em;
 }
 
-.viewer-page #write ol {
-  padding-left: 1.2em;
+.viewer-page #write li {
+  margin-bottom: 0.35em;
+  line-height: 1.7;
 }
 
 .viewer-page #write blockquote {
-  margin-left: 1em;
-  padding-left: 1em;
-  border-left: 1px solid #ddd;
-  background: transparent;
-  color: inherit;
+  margin: 1em 0;
+  padding: 0.8em 1.2em;
+  border-left: 4px solid var(--ink-blockquote-border);
+  background: var(--ink-blockquote-bg);
+  border-radius: 0 6px 6px 0;
+  color: var(--ink-blockquote-text);
 }
 
 .viewer-page #write code,
 .viewer-page #write pre {
-  font-family: Consolas, Menlo, Monaco, monospace;
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.9em;
+}
+
+.viewer-page #write code {
+  background: var(--ink-code-bg);
+  color: var(--ink-code-text);
+  padding: 0.2em 0.45em;
+  border-radius: 4px;
+}
+
+.viewer-page #write pre {
+  margin: 1.2em 0;
+  padding: 0;
+  border-radius: 8px;
+  overflow: auto;
+  border: 1px solid var(--ink-border);
+  box-shadow: 0 1px 3px var(--ink-shadow);
   background: #fff;
 }
 
+.viewer-page #write pre > code {
+  display: block;
+  padding: 1.2em 1.4em;
+  background: var(--ink-code-bg);
+  color: var(--ink-text);
+  line-height: 1.65;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
 .viewer-page #write a {
-  color: #2484c1;
+  color: var(--ink-link);
   text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .viewer-page #write a:hover {
-  text-decoration: underline;
-}
-
-.viewer-page #write a img {
-  border: 0;
+  color: var(--ink-link-hover);
+  border-bottom-color: var(--ink-link-hover);
 }
 
 .viewer-page #write h1 a,
 .viewer-page #write h1 a:hover {
-  color: #333;
+  color: var(--ink-heading);
   text-decoration: none;
 }
 
 .viewer-page #write hr {
+  border: 0;
   height: 1px;
   margin: 2em 0;
-  color: #ddd;
-  border: 0;
-  border-top: 1px solid #ddd;
+  background: linear-gradient(to right, transparent, var(--ink-hr), transparent);
 }
 
 .viewer-page #write table {
+  width: 100%;
   margin-bottom: 1.333333rem;
+  border-collapse: collapse;
 }
 
 .viewer-page #write th,
@@ -128,8 +210,7 @@
   padding: 8px;
   line-height: 1.333333rem;
   vertical-align: top;
-  border: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--ink-border);
 }
 
 .viewer-page #write th {
@@ -140,30 +221,101 @@
   vertical-align: bottom;
 }
 
-.viewer-page #write thead:first-child tr:first-child th,
-.viewer-page #write thead:first-child tr:first-child td {
-  border-top: 0;
-}
-
 .viewer-page #write tbody + tbody {
-  border-top: 2px solid #ddd;
+  border-top: 2px solid var(--ink-border);
 }
 
-.viewer-page #write .task-list {
-  padding: 0;
+.viewer-page #write img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
 }
 
-.viewer-page #write .md-task-list-item {
-  padding-left: 1.6rem;
+.viewer-page #write .math-display {
+  margin: 1rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: normal;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-@media print {
-  .viewer-page #write {
-    font-size: 13px;
-  }
+.viewer-page #write .math-display::-webkit-scrollbar {
+  display: none;
+}
 
-  .viewer-page #write ol {
-    padding-left: 40px;
+.viewer-page #write .math-display > .katex-display {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+}
+
+.viewer-page #write .math-display mjx-container,
+.viewer-page #write mjx-container[display="true"] {
+  display: block !important;
+  width: max-content;
+  min-width: 100%;
+  text-align: center;
+  overflow: visible !important;
+  max-width: none;
+  height: auto !important;
+}
+
+.viewer-page .toc-panel {
+  background: #fff;
+  border: 1px solid var(--ink-border);
+  box-shadow: none;
+  color: var(--ink-text);
+}
+
+.viewer-page .toc-header {
+  margin-bottom: 10px;
+}
+
+.viewer-page .toc-header .section-title {
+  color: var(--ink-heading);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.viewer-page .toc-list {
+  gap: 4px;
+}
+
+.viewer-page .toc-link {
+  color: #5a6872;
+  padding: 5px 10px 5px 6px;
+  border-radius: 4px;
+  transition: background-color 0.18s ease, color 0.18s ease, text-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.viewer-page .toc-link:hover,
+.viewer-page .toc-link.is-active {
+  background: #f3f6fa;
+  color: var(--ink-heading);
+  text-shadow: 0 0 0.6px rgba(26, 35, 50, 0.5);
+}
+
+.viewer-page .toc-link.is-active {
+  box-shadow: none;
+}
+
+.viewer-page .toc-text {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.viewer-page .toc-panel::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.viewer-page .toc-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.26);
+}
+
+@media (max-width: 1180px) {
+  .viewer-page .viewer-shell {
+    width: min(980px, calc(100vw - 24px));
   }
 }
 
@@ -171,22 +323,21 @@
   .viewer-page #write {
     max-width: none;
     margin: 0;
-    padding: 18px 16px 48px;
+    padding: 1.4em 1em 3em;
     font-size: 15px;
-    line-height: 1.5;
-    text-align: left;
+    line-height: 1.62;
   }
 
   .viewer-page #write h1 {
-    font-size: 2.1em;
+    font-size: 1.8em;
   }
 
   .viewer-page #write h2 {
-    font-size: 1.6em;
+    font-size: 1.45em;
   }
 
   .viewer-page #write h3 {
-    margin-top: 2em;
-    font-size: 1.25em;
+    font-size: 1.18em;
+    margin-top: 1.8em;
   }
 }

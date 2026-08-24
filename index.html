@@ -62,7 +62,7 @@
   </div>
 
   <script type="module">
-    import { escapeHtml, formatDate, formatTimestamp, toViewerUrl } from './scripts/shared.js';
+    import { escapeHtml, formatDate, formatTimestamp } from './scripts/shared.js';
 
     const treeEl = document.querySelector('#tree');
     const totalPostsEl = document.querySelector('#total-posts');
@@ -78,6 +78,12 @@
       return formatDate(node.mtime);
     }
 
+    function buildViewerUrl(markdownPath) {
+      const url = new URL('./viewer.html', window.location.href);
+      url.searchParams.set('file', `notes/${String(markdownPath).replace(/^\/+/, '')}`);
+      return url.toString();
+    }
+
     function renderLine({ node, prefix, connector }) {
       const isDirectory = node.type === 'directory';
       const label = isDirectory ? node.name : (node.title || node.name.replace(/\.md$/i, ''));
@@ -86,7 +92,7 @@
       const className = isDirectory ? 'is-directory' : 'is-file';
       const content = isDirectory
         ? `<span class="tree-node-title">${title}</span>`
-        : `<a class="tree-node-title" href="${toViewerUrl(node.path)}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+        : `<a class="tree-node-title" href="${buildViewerUrl(node.path)}" target="_blank" rel="noopener noreferrer">${title}</a>`;
 
       return `
         <div class="tree-line" role="treeitem" aria-label="${title}">

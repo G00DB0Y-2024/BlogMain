@@ -84,7 +84,8 @@
 
     function getMarkdownPath() {
       const decoded = safeDecodeURIComponent(markdownUrl || '');
-      return stripLeadingSlashes(decoded.replace(/\\/g, '/'));
+      const normalized = stripLeadingSlashes(decoded.replace(/\\/g, '/'));
+      return normalized.startsWith('notes/') ? normalized : `notes/${normalized}`;
     }
 
     function createMarkdownIt() {
@@ -246,7 +247,7 @@
         throw new Error('缺少 file 参数');
       }
 
-      const response = await fetch(resolveFromSite(markdownPath), { cache: 'no-cache' });
+      const response = await fetch(`./${encodeURI(markdownPath)}`, { cache: 'no-cache' });
       if (!response.ok) {
         throw new Error(`无法加载文章：${response.status}`);
       }

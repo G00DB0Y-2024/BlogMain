@@ -13,9 +13,9 @@
   --accent-strong: #4f82ff;
   --shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
   --shadow-soft: 0 8px 20px rgba(31, 41, 55, 0.06);
-  --radius-lg: 24px;
-  --radius-md: 18px;
-  --radius-sm: 12px;
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
   --content-width: 1100px;
 }
 
@@ -44,6 +44,21 @@ body.home-page {
 
 body.viewer-page {
   background: #f6f7fb;
+}
+
+.home-page .hero,
+.home-page .panel,
+.home-page .profile-cover,
+.home-page .tree-wrap,
+.home-page .tree-root-line,
+.home-page .tree-item,
+.viewer-page .viewer-card,
+.viewer-page .toc-panel,
+.viewer-page .viewer-button,
+.viewer-page #write pre,
+.viewer-page .code-frame,
+.viewer-page #write img {
+  border-radius: 0;
 }
 
 .viewer-page {
@@ -772,6 +787,57 @@ details[open] > ul {
 
   .tree-node-meta {
     font-size: 0.78rem;
+  }
+
+  .viewer-page {
+    background: #fff;
+  }
+
+  .viewer-page .viewer-shell,
+  .viewer-page .viewer-card,
+  .viewer-page .viewer-layout,
+  .viewer-page .viewer-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .viewer-page .viewer-bar,
+  .viewer-page .viewer-toolbar,
+  .viewer-page .toc-panel {
+    display: none;
+  }
+
+  .viewer-page #write {
+    max-width: none;
+    margin: 0;
+    padding: 18px 16px 48px;
+    font-size: 0.88rem;
+    line-height: 1.58;
+  }
+
+  .viewer-page #write h1 {
+    font-size: 1.7rem;
+  }
+
+  .viewer-page #write h2 {
+    font-size: 1.38rem;
+  }
+
+  .viewer-page #write h3 {
+    font-size: 1.15rem;
+  }
+
+  .viewer-page #write pre {
+    font-size: 0.78rem;
+    overflow-x: auto;
+  }
+
+  .viewer-page #write img {
+    border-radius: 0;
   }
 
   .viewer-bar {

@@ -114,7 +114,7 @@
       const rootLine = document.querySelector('.tree-root-line');
       const treeWrap = document.querySelector('.tree-wrap');
       if (!rootLine || !treeWrap) return;
-      const treeWidth = Math.max(treeWrap.clientWidth - 28, treeEl.scrollWidth - 28);
+      const treeWidth = Math.max(treeWrap.clientWidth, treeEl.scrollWidth);
       rootLine.style.width = `${treeWidth}px`;
     }
 

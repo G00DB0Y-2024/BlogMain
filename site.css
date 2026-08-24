@@ -840,11 +840,12 @@ details[open] > ul {
 
   .file-tree {
     min-width: max-content;
-    padding-right: 24px;
+    padding-right: 0;
   }
 
   .tree-root-line {
     min-width: 100%;
+    width: 100% !important;
   }
 
   .tree-item {
@@ -854,18 +855,15 @@ details[open] > ul {
 
   .tree-title-scroll {
     max-width: none;
+    order: 0;
   }
 
   .tree-node-meta {
-    order: -1;
-    margin-left: 0;
-    margin-right: 10px;
-    flex: 0 0 auto;
-    text-align: left;
-  }
-
-  .tree-title-scroll {
     order: 1;
+    margin-left: auto;
+    margin-right: 0;
+    flex: 0 0 auto;
+    text-align: right;
   }
 
   .viewer-page {

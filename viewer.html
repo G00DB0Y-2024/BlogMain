@@ -274,8 +274,7 @@
       tocListEl.innerHTML = items.map((item) => {
         const indent = Math.max(0, item.level - 1);
         return `
-          <a class="toc-link level-${item.level}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${indent}">
-            <span class="toc-marker" aria-hidden="true"></span>
+          <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${indent}">
             <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
@@ -313,6 +312,27 @@
       });
     }
 
+    function updateActiveToc() {
+      const headings = Array.from(writeEl.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const tocLinks = Array.from(tocListEl.querySelectorAll('.toc-link'));
+      if (!headings.length || !tocLinks.length) return;
+
+      const viewportTop = 110;
+      let activeId = headings[0].id;
+
+      for (const heading of headings) {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top - viewportTop <= 0) {
+          activeId = heading.id;
+        }
+      }
+
+      tocLinks.forEach((link) => {
+        const isActive = link.dataset.headingId === activeId;
+        link.classList.toggle('is-active', isActive);
+      });
+    }
+
     function finalizeViewer(markdownPath) {
       setLinkedAssets(writeEl, markdownPath);
       setLinkedAnchors(writeEl, markdownPath);
@@ -332,6 +352,7 @@
           const target = document.getElementById(active);
           target?.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
+        updateActiveToc();
       });
     }
 
@@ -369,6 +390,8 @@
         statusEl.textContent = 'Failed';
       }
     }
+
+    window.addEventListener('scroll', updateActiveToc, { passive: true });
 
     toggleTocBtn.addEventListener('click', () => {
       tocPanelEl.classList.toggle('is-collapsed');

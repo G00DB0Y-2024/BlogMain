@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@0.9.0/texmath.min.js"></script>
 </head>
 <body class="viewer-page">
   <div class="viewer-shell">
@@ -75,29 +74,113 @@
 
     function createMarkdownIt() {
       const markdownit = window.markdownit;
-      const texmath = window.texmath || window.markdownitTexmath || window.markdownitTexMath;
-      const katex = window.katex;
-
       if (!markdownit) {
         throw new Error('markdown-it 未加载');
       }
-      if (!texmath) {
-        throw new Error('texmath 未加载');
-      }
-      if (!katex) {
-        throw new Error('katex 未加载');
-      }
-
-      const md = markdownit({
+      return markdownit({
         html: true,
         linkify: true,
         breaks: true,
         typographer: true,
       });
+    }
 
-      md.use(texmath, { engine: katex, delimiters: 'dollars' });
-      md.use(texmath, { engine: katex, delimiters: 'brackets' });
-      return md;
+    function renderKatex(content, displayMode) {
+      const katex = window.katex;
+      if (!katex) {
+        throw new Error('katex 未加载');
+      }
+      return katex.renderToString(content, {
+        displayMode,
+        throwOnError: false,
+        strict: 'ignore',
+        trust: false,
+        output: 'htmlAndMathml',
+      });
+    }
+
+    function protectCode(source) {
+      const stash = [];
+      const replaceWithToken = (match) => {
+        const token = `@@CODE_${stash.length}@@`;
+        stash.push(match);
+        return token;
+      };
+
+      const text = String(source)
+        .replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, replaceWithToken)
+        .replace(/`[^`\n]+`/g, replaceWithToken);
+
+      return {
+        text,
+        restore(value) {
+          return String(value).replace(/@@CODE_(\d+)@@/g, (_, index) => stash[Number(index)] ?? '');
+        },
+      };
+    }
+
+    function extractMath(source) {
+      const protectedCode = protectCode(source);
+      let text = protectedCode.text;
+      const inlineMath = [];
+      const blockMath = [];
+
+      const makeInlineToken = (html) => {
+        const token = `@@MATH_INLINE_${inlineMath.length}@@`;
+        inlineMath.push(html);
+        return token;
+      };
+
+      const makeBlockToken = (html) => {
+        const token = `@@MATH_BLOCK_${blockMath.length}@@`;
+        blockMath.push(html);
+        return token;
+      };
+
+      text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
+        const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
+        return `\n\n${makeBlockToken(html)}\n\n`;
+      });
+
+      text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
+        const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
+        return `\n\n${makeBlockToken(html)}\n\n`;
+      });
+
+      text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, content) => {
+        return makeInlineToken(renderKatex(content.trim(), false));
+      });
+
+      text = text.replace(/(?<!\\)\$([^\n$]+?)\$/g, (_, content) => {
+        return makeInlineToken(renderKatex(content.trim(), false));
+      });
+
+      return {
+        text: protectedCode.restore(text),
+        inlineMath,
+        blockMath,
+      };
+    }
+
+    function injectMath(html, inlineMath, blockMath) {
+      let output = html;
+
+      for (let index = 0; index < blockMath.length; index += 1) {
+        const token = `@@MATH_BLOCK_${index}@@`;
+        const replacement = blockMath[index];
+        output = output.replace(new RegExp(`<p>\\s*${token}\\s*<\\/p>`, 'g'), replacement);
+        output = output.replace(new RegExp(token, 'g'), replacement);
+      }
+
+      output = output.replace(/<p>\s*<div class="math-display">([\s\S]*?)<\/div>\s*<\/p>/g, '<div class="math-display">$1</div>');
+
+      for (let index = 0; index < inlineMath.length; index += 1) {
+        const token = `@@MATH_INLINE_${index}@@`;
+        const replacement = inlineMath[index];
+        output = output.replace(new RegExp(token, 'g'), replacement);
+      }
+
+      return output;
     }
 
     function resolveLinkHref(markdownPath, href) {
@@ -171,7 +254,7 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, text, id, html: heading.innerHTML });
+        items.push({ level, html: heading.innerHTML, id });
       });
 
       if (!items.length) {
@@ -261,13 +344,13 @@
         titleEl.textContent = title;
         statusEl.textContent = markdownPath;
 
-        const raw = await loadMarkdown(markdownPath);
+        const source = await loadMarkdown(markdownPath);
+        const { text, inlineMath, blockMath } = extractMath(source);
         const md = createMarkdownIt();
+        const html = injectMath(md.render(text, { markdownPath }), inlineMath, blockMath);
 
-        const html = md.render(raw, { markdownPath });
         writeEl.innerHTML = html;
         finalizeViewer(markdownPath);
-
         statusEl.textContent = 'Ready';
       } catch (error) {
         writeEl.innerHTML = `<div class="viewer-error">${escapeHtml(error.message)}</div>`;

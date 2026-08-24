@@ -439,6 +439,7 @@ textarea {
 #write .math-display {
   margin: 1rem 0;
   overflow: visible;
+  white-space: normal;
 }
 
 #write .math-display mjx-container,

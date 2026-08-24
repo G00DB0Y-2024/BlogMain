@@ -110,6 +110,45 @@
       return resolveMarkdownLink(markdownPath, clean);
     }
 
+    function escapeMathContent(content) {
+      return escapeHtml(String(content).trim());
+    }
+
+    function protectMarkdownCode(source) {
+      const stash = [];
+      const push = (match) => {
+        const token = `@@PROTECTED_${stash.length}@@`;
+        stash.push(match);
+        return token;
+      };
+
+      let text = source;
+      text = text.replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, push);
+      text = text.replace(/`[^`\n]+`/g, push);
+
+      return {
+        text,
+        restore(value) {
+          return String(value).replace(/@@PROTECTED_(\d+)@@/g, (_, index) => stash[Number(index)] ?? '');
+        },
+      };
+    }
+
+    function convertMathSyntax(source) {
+      const protectedSource = protectMarkdownCode(source);
+      let text = protectedSource.text;
+
+      text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
+        return `\n\n<div class="math-display">\\[${escapeMathContent(content)}\\]</div>\n\n`;
+      });
+
+      text = text.replace(/(?<!\\)\$(?!\s)([^\n$]+?)(?<!\s)\$(?!\$)/g, (_, content) => {
+        return `<span class="math-inline">\\(${escapeMathContent(content)}\\)</span>`;
+      });
+
+      return protectedSource.restore(text);
+    }
+
     function setLinkedAnchors(root, markdownPath) {
       root.querySelectorAll('a[href]').forEach((element) => {
         const original = element.getAttribute('href') || '';
@@ -172,7 +211,7 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, text, id });
+        items.push({ level, text, id, html: heading.innerHTML });
       });
 
       if (!items.length) {
@@ -187,7 +226,7 @@
         return `
           <a class="toc-link level-${item.level}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${indent}">
             <span class="toc-marker" aria-hidden="true"></span>
-            <span class="toc-text">${escapeHtml(item.text)}</span>
+            <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
     }
@@ -262,7 +301,7 @@
         titleEl.textContent = title;
         statusEl.textContent = markdownPath;
 
-        const raw = await loadMarkdown(markdownPath);
+        const raw = convertMathSyntax(await loadMarkdown(markdownPath));
         const md = createMarkdownIt();
 
         md.renderer.rules.image = function (tokens, idx, options, env, self) {

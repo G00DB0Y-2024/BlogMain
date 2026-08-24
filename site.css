@@ -432,6 +432,20 @@ textarea {
   border-radius: 12px;
 }
 
+#write .math-inline {
+  white-space: nowrap;
+}
+
+#write .math-display {
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+#write .math-display mjx-container {
+  display: block !important;
+  text-align: center;
+}
+
 #write pre {
   overflow: auto;
 }
@@ -522,7 +536,8 @@ textarea {
   background: rgba(249, 251, 255, 0.95);
   box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
   max-height: calc(100vh - 40px);
-  overflow: auto;
+  overflow-x: visible;
+  overflow-y: auto;
 }
 
 .toc-panel.is-collapsed {
@@ -534,8 +549,10 @@ textarea {
 }
 
 .toc-list {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 4px;
+  overflow: visible;
 }
 
 .toc-empty {
@@ -545,13 +562,15 @@ textarea {
 
 .toc-link {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   padding: 6px 8px;
   border-radius: 10px;
   color: var(--text-secondary);
   line-height: 1.35;
   transform: translateX(calc(var(--toc-indent, 0) * 12px));
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .toc-link:hover {
@@ -569,6 +588,8 @@ textarea {
 
 .toc-text {
   font-size: 0.9rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 1180px) {

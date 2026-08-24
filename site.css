@@ -3,16 +3,16 @@
  * Keep Typora正文样式独立放在 main.css 中。
  */
 :root {
-  --page-bg: #f5f7fb;
-  --panel-bg: rgba(255, 255, 255, 0.92);
-  --panel-border: rgba(20, 32, 55, 0.08);
-  --text-primary: #1f2937;
-  --text-secondary: #667085;
-  --text-muted: #98a2b3;
-  --accent: #7aa7ff;
-  --accent-strong: #4f82ff;
-  --shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
-  --shadow-soft: 0 8px 20px rgba(31, 41, 55, 0.06);
+  --page-bg: #fefefe;
+  --panel-bg: #ffffff;
+  --panel-border: #ddd;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-muted: #999;
+  --accent: #2484c1;
+  --accent-strong: #2484c1;
+  --shadow: none;
+  --shadow-soft: none;
   --radius-lg: 0;
   --radius-md: 0;
   --radius-sm: 0;
@@ -30,16 +30,18 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(122, 167, 255, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(122, 167, 255, 0.12), transparent 24%),
-    linear-gradient(180deg, #f7f9fd 0%, #f4f7fb 44%, #eef3f9 100%);
+  background: #fefefe;
   color: var(--text-primary);
-  font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  font-family: "Vollkorn", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", "Microsoft YaHei", serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 body.home-page {
   padding: 8px 8px 28px;
+}
+
+body.home-page .shell {
+  background: #fff;
 }
 
 body.viewer-page {
@@ -84,67 +86,59 @@ textarea {
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: 190px;
-  border: 1px solid var(--panel-border);
-  border-radius: 20px;
-  background:
-    linear-gradient(135deg, rgba(103, 146, 255, 0.96), rgba(137, 180, 255, 0.82)),
-    url("./assets/hero.jpg") center/cover no-repeat;
-  box-shadow: var(--shadow);
+  min-height: 160px;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
 }
 
 .hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 35%),
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.26), transparent 42%);
-  pointer-events: none;
+  content: none;
 }
 
 .hero-inner {
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  min-height: 190px;
-  padding: 28px 24px 24px;
+  min-height: 160px;
+  padding: 24px;
 }
 
 .hero-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  margin-top: 48px;
+  gap: 10px;
+  margin-top: 0;
 }
 
 .hero-avatar {
-  width: 86px;
-  height: 86px;
-  border-radius: 18px;
-  border: 4px solid rgba(255, 255, 255, 0.84);
-  background: rgba(255, 255, 255, 0.45) center/cover no-repeat;
-  box-shadow: 0 10px 30px rgba(29, 48, 88, 0.18);
+  width: 56px;
+  height: 56px;
+  border-radius: 0;
+  border: 1px solid #ddd;
+  background: #fff center/cover no-repeat;
+  box-shadow: none;
 }
 
 .hero-title {
   margin: 0;
-  color: #162033;
-  font-size: clamp(2rem, 4vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  color: #333;
+  font-size: clamp(2rem, 4vw, 2.4rem);
+  font-weight: normal;
+  letter-spacing: 0;
   text-align: center;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: none;
 }
 
 .hero-subtitle {
   margin: 0;
   max-width: 760px;
-  color: rgba(22, 32, 51, 0.78);
-  font-size: 0.96rem;
+  color: #666;
+  font-size: 0.92rem;
   text-align: center;
 }
 
@@ -158,10 +152,10 @@ textarea {
 
 .panel {
   border: 1px solid var(--panel-border);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   background: var(--panel-bg);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .panel-pad {
@@ -222,9 +216,9 @@ textarea {
 
 .stat {
   padding: 12px 10px;
-  border-radius: 16px;
-  background: rgba(122, 167, 255, 0.08);
-  border: 1px solid rgba(122, 167, 255, 0.12);
+  border-radius: 0;
+  background: #f8f8f8;
+  border: 1px solid #ddd;
 }
 
 .stat-value {
@@ -272,9 +266,9 @@ textarea {
 .tree-wrap {
   position: relative;
   overflow: auto;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(250, 251, 255, 0.88), rgba(246, 248, 252, 0.98));
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  border-radius: 0;
+  background: #fff;
+  border: 1px solid #ddd;
 }
 
 .tree {
@@ -293,9 +287,10 @@ textarea {
   min-width: 100%;
   padding: 7px 8px;
   margin-bottom: 6px;
-  color: #24324b;
+  color: #333;
   font-weight: 700;
-  background: rgba(238, 243, 249, 0.98);
+  background: #f8f8f8;
+  border-bottom: 1px solid #ddd;
 }
 
 .tree-root-title {
@@ -351,25 +346,25 @@ details > summary::-webkit-details-marker {
 }
 
 .tree-item:hover {
-  background: rgba(122, 167, 255, 0.1);
-  color: #1f2937;
+  background: #f2f2f2;
+  color: #333;
   transform: translateX(2px);
 }
 
 .directory-item {
   font-weight: 650;
-  color: #26354f;
+  color: #333;
 }
 
 .file-item {
-  color: #475569;
+  color: #555;
 }
 
 .arrow {
   display: inline-block;
   flex: 0 0 16px;
   width: 16px;
-  color: #94a3b8;
+  color: #999;
   font-size: 0.66rem;
   line-height: 1;
   transition: transform 0.2s ease;
@@ -691,15 +686,15 @@ details[open] > ul {
   width: 286px;
   margin: 0;
   padding: 12px 16px 12px 10px;
-  border-radius: 18px;
-  border: 1px solid rgba(20, 32, 55, 0.08);
-  background: rgba(249, 251, 255, 0.95);
-  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
+  border-radius: 0;
+  border: 1px solid #ddd;
+  background: #fff;
+  box-shadow: none;
   max-height: 60vh;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(122, 167, 255, 0.18) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
   transform: translate3d(0, var(--toc-y, 104px), 0);
   transition: box-shadow 220ms ease, opacity 220ms ease;
   will-change: transform;
@@ -715,11 +710,11 @@ details[open] > ul {
 
 .toc-panel::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(122, 167, 255, 0.22);
+  background: rgba(0, 0, 0, 0.18);
 }
 
 .toc-panel::-webkit-scrollbar-thumb:hover {
-  background: rgba(122, 167, 255, 0.34);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .toc-panel.is-collapsed {
@@ -763,12 +758,12 @@ details[open] > ul {
 
 .toc-link:hover,
 .toc-link.is-active {
-  background: rgba(122, 167, 255, 0.1);
-  color: var(--text-primary);
+  background: #f2f2f2;
+  color: #333;
 }
 
 .toc-link.is-active {
-  box-shadow: inset 2px 0 0 rgba(79, 130, 255, 0.52);
+  box-shadow: inset 2px 0 0 #333;
 }
 
 .toc-marker {

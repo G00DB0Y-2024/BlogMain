@@ -279,6 +279,10 @@
             <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
+
+      if (window.MathJax?.typesetPromise) {
+        window.MathJax.typesetPromise([tocListEl]).catch(() => {});
+      }
     }
 
     function enhanceCodeBlocks(root) {

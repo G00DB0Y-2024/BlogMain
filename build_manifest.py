@@ -8,9 +8,7 @@ import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
-
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parent
 CONTENT_ROOT = ROOT / 'notes'
 MANIFEST_PATH = ROOT / 'manifest.json'
 EXCLUDED_DIRS = {'.git', 'node_modules', 'scripts', 'vendor'}

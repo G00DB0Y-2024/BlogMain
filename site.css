@@ -533,15 +533,36 @@ textarea {
 
 .toc-panel {
   position: sticky;
-  top: 12px;
+  top: 16px;
+  align-self: start;
   margin: 14px 14px 14px 0;
   padding: 14px;
   border-radius: 18px;
   border: 1px solid rgba(20, 32, 55, 0.08);
   background: rgba(249, 251, 255, 0.95);
   box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
-  max-height: calc(100vh - 40px);
-  overflow: hidden;
+  max-height: 60vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 167, 255, 0.45) transparent;
+}
+
+.toc-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.toc-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-panel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(122, 167, 255, 0.38);
+}
+
+.toc-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 167, 255, 0.58);
 }
 
 .toc-panel.is-collapsed {
@@ -557,7 +578,6 @@ textarea {
   flex-direction: column;
   gap: 4px;
   overflow: visible;
-  max-height: calc(100vh - 160px);
   padding-right: 2px;
   margin-right: -2px;
 }
@@ -580,6 +600,7 @@ textarea {
   overflow-wrap: anywhere;
   word-break: break-word;
   max-width: 100%;
+  min-width: 0;
 }
 
 .toc-link:hover {
@@ -599,6 +620,8 @@ textarea {
   font-size: 0.9rem;
   white-space: normal;
   overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
 }
 
 @media (max-width: 1180px) {

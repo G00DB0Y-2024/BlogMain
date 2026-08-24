@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Typora-style article viewer.">
+  <title>Article Viewer</title>
+  <link rel="stylesheet" href="./site.css">
+  <link rel="stylesheet" href="./main.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: {
+        typeset: false
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+</head>
+<body class="viewer-page">
+  <div class="viewer-shell">
+    <div class="viewer-card">
+      <div class="viewer-bar">
+        <div>
+          <a class="back-link" href="./index.html">← 首页</a>
+        </div>
+        <div class="viewer-status" id="viewer-status">Loading…</div>
+      </div>
+      <div class="viewer-content">
+        <main id="write" aria-label="文章内容">
+          <div class="viewer-error">正在加载文章…</div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      basename,
+      escapeHtml,
+      isAnchoredOrExternal,
+      joinPath,
+      normalizeSlashes,
+      resolveAssetUrl,
+      resolveFromSite,
+      resolveMarkdownLink,
+      safeDecodeURIComponent,
+      stripLeadingSlashes,
+      removeExtension,
+    } from './scripts/shared.js';
+
+    const writeEl = document.querySelector('#write');
+    const statusEl = document.querySelector('#viewer-status');
+    const markdownUrl = new URL(window.location.href).searchParams.get('file');
+
+    function getMarkdownPath() {
+      const decoded = safeDecodeURIComponent(markdownUrl || '');
+      return stripLeadingSlashes(normalizeSlashes(decoded));
+    }
+
+    function createMarkdownIt() {
+      const markdownit = window.markdownit;
+      if (!markdownit) {
+        throw new Error('markdown-it 未加载');
+      }
+      return markdownit({
+        html: true,
+        linkify: true,
+        breaks: true,
+        typographer: true,
+      });
+    }
+
+    function rewriteRenderedDom(root, markdownPath) {
+      const selectorMap = [
+        ['img', 'src'],
+        ['a', 'href'],
+        ['source', 'src'],
+        ['video', 'src'],
+        ['audio', 'src'],
+      ];
+
+      for (const [tag, attr] of selectorMap) {
+        root.querySelectorAll(`${tag}[${attr}]`).forEach((element) => {
+          const original = element.getAttribute(attr);
+          if (!original || isAnchoredOrExternal(original)) return;
+
+          if (tag === 'a') {
+            const lower = original.toLowerCase();
+            if (lower.endsWith('.md')) {
+              element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(resolveMarkdownLink(markdownPath, original))}`);
+              element.setAttribute('target', '_blank');
+              element.setAttribute('rel', 'noopener noreferrer');
+              return;
+            }
+          }
+
+          element.setAttribute(attr, resolveAssetUrl(markdownPath, original));
+        });
+      }
+
+      root.querySelectorAll('a[href]').forEach((element) => {
+        const original = element.getAttribute('href') || '';
+        if (!original || isAnchoredOrExternal(original)) return;
+
+        if (original.toLowerCase().endsWith('.md')) {
+          const target = stripLeadingSlashes(normalizeSlashes(joinPath('', original)));
+          element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(target)}`);
+          element.setAttribute('target', '_blank');
+          element.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+    }
+
+    function applyTyporaLikeLayout(root) {
+      root.querySelectorAll('img').forEach((img) => {
+        img.loading = 'lazy';
+      });
+
+      root.querySelectorAll('table').forEach((table) => {
+        const wrapper = document.createElement('div');
+        wrapper.style.overflowX = 'auto';
+        wrapper.style.margin = '0.8em 0';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
+    }
+
+    async function loadMarkdown(markdownPath) {
+      if (!markdownPath) {
+        throw new Error('缺少 file 参数');
+      }
+
+      const response = await fetch(resolveFromSite(markdownPath), { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`无法加载文章：${response.status}`);
+      }
+      return response.text();
+    }
+
+    async function render() {
+      try {
+        const markdownPath = getMarkdownPath();
+        const title = removeExtension(basename(markdownPath)) || 'Untitled';
+        document.title = `${title} · Typora Notes`;
+        statusEl.textContent = markdownPath;
+
+        const raw = await loadMarkdown(markdownPath);
+        const md = createMarkdownIt();
+
+        md.renderer.rules.image = function (tokens, idx, options, env, self) {
+          const token = tokens[idx];
+          const src = token.attrGet('src') || '';
+          const alt = token.content || '';
+          const titleAttr = token.attrGet('title');
+          const resolvedSrc = resolveAssetUrl(markdownPath, src);
+          const attrs = [`src="${escapeHtml(resolvedSrc)}"`, `alt="${escapeHtml(alt)}"`];
+          if (titleAttr) attrs.push(`title="${escapeHtml(titleAttr)}"`);
+          return `<img ${attrs.join(' ')}>`;
+        };
+
+        md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+          const token = tokens[idx];
+          const href = token.attrGet('href') || '';
+          if (href && !isAnchoredOrExternal(href) && href.toLowerCase().endsWith('.md')) {
+            const targetPath = resolveMarkdownLink(markdownPath, href);
+            token.attrSet('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
+            token.attrSet('target', '_blank');
+            token.attrSet('rel', 'noopener noreferrer');
+          } else if (href && !isAnchoredOrExternal(href)) {
+            token.attrSet('href', resolveAssetUrl(markdownPath, href));
+          }
+          return self.renderToken(tokens, idx, options);
+        };
+
+        const html = md.render(raw, { markdownPath });
+        writeEl.innerHTML = html;
+        rewriteRenderedDom(writeEl, markdownPath);
+        applyTyporaLikeLayout(writeEl);
+
+        statusEl.textContent = 'Ready';
+        if (window.MathJax?.typesetPromise) {
+          await window.MathJax.typesetPromise([writeEl]);
+        }
+      } catch (error) {
+        writeEl.innerHTML = `<div class="viewer-error">${escapeHtml(error.message)}</div>`;
+        statusEl.textContent = 'Failed';
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

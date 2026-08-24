@@ -312,7 +312,50 @@
       });
     }
 
+    const tocMotion = {
+      initialOffset: 104,
+      thresholdOffset: 24,
+      currentY: 104,
+      targetY: 104,
+      raf: 0,
+    };
+
     let tocRaf = 0;
+
+    function getViewerPageTop() {
+      const page = document.querySelector('.viewer-page');
+      return page ? page.getBoundingClientRect().top : 0;
+    }
+
+    function computeTocTargetY() {
+      const naturalY = getViewerPageTop() + tocMotion.initialOffset;
+      return Math.max(tocMotion.thresholdOffset, naturalY);
+    }
+
+    function animateTocPosition() {
+      tocMotion.targetY = computeTocTargetY();
+      tocMotion.currentY += (tocMotion.targetY - tocMotion.currentY) * 0.16;
+
+      if (Math.abs(tocMotion.targetY - tocMotion.currentY) < 0.2) {
+        tocMotion.currentY = tocMotion.targetY;
+      }
+
+      tocPanelEl.style.setProperty('--toc-y', `${tocMotion.currentY}px`);
+
+      if (tocMotion.currentY !== tocMotion.targetY) {
+        tocMotion.raf = window.requestAnimationFrame(animateTocPosition);
+        return;
+      }
+
+      tocMotion.raf = 0;
+    }
+
+    function scheduleTocMotion() {
+      tocMotion.targetY = computeTocTargetY();
+      if (!tocMotion.raf) {
+        tocMotion.raf = window.requestAnimationFrame(animateTocPosition);
+      }
+    }
 
     function updateActiveToc() {
       const headings = Array.from(writeEl.querySelectorAll('h1, h2, h3, h4, h5, h6'));
@@ -363,6 +406,7 @@
           target?.scrollIntoView({ block: 'start', behavior: 'smooth' });
         }
         scheduleActiveTocUpdate();
+        scheduleTocMotion();
       });
     }
 
@@ -401,7 +445,12 @@
       }
     }
 
-    window.addEventListener('scroll', scheduleActiveTocUpdate, { passive: true });
+    window.addEventListener('scroll', () => {
+      scheduleActiveTocUpdate();
+      scheduleTocMotion();
+    }, { passive: true });
+
+    window.addEventListener('resize', scheduleTocMotion);
 
     tocListEl.addEventListener('click', (event) => {
       const link = event.target.closest('.toc-link');

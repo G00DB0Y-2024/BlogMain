@@ -538,7 +538,7 @@ textarea {
 
 .toc-panel {
   position: fixed;
-  top: 104px;
+  top: 0;
   right: max(14px, calc((100vw - 1320px) / 2 + 14px));
   z-index: 20;
   width: 286px;
@@ -553,7 +553,8 @@ textarea {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(122, 167, 255, 0.18) transparent;
-  transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
+  transform: translate3d(0, var(--toc-y, 104px), 0);
+  transition: box-shadow 220ms ease, opacity 220ms ease;
   will-change: transform;
 }
 

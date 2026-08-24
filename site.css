@@ -303,6 +303,14 @@ textarea {
   min-width: 0;
 }
 
+.tree-root-line .tree-node-meta {
+  flex: 0 0 82px;
+  width: 82px;
+  margin-left: 0;
+  padding-right: 12px;
+  text-align: right;
+}
+
 ul.file-tree,
 ul.file-tree ul {
   list-style: none;
@@ -405,12 +413,15 @@ details[open] > summary .arrow {
 }
 
 .tree-node-meta {
-  flex: 0 0 auto;
+  flex: 0 0 82px;
+  width: 82px;
   margin-left: auto;
   padding: 2px 12px 2px 10px;
   color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
   background: rgba(246, 248, 252, 0.98);
 }
 
@@ -860,9 +871,10 @@ details[open] > ul {
 
   .tree-node-meta {
     order: 1;
+    flex: 0 0 82px;
+    width: 82px;
     margin-left: auto;
     margin-right: 0;
-    flex: 0 0 auto;
     text-align: right;
   }
 

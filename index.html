@@ -144,7 +144,7 @@
 
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
-        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-node-title tree-root-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-root-title tree-node-title">${rootName}</span><span class="tree-node-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
         requestAnimationFrame(syncRootLineWidth);
         bindTreeResize();
         window.addEventListener('resize', syncRootLineWidth);

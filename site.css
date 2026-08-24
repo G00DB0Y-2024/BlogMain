@@ -287,21 +287,28 @@ textarea {
 }
 
 .tree-root-line {
+  position: sticky;
+  left: 0;
+  z-index: 5;
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
-  min-width: 100%;
+  width: max-content;
+  min-width: calc(100% - 16px);
   padding: 7px 8px;
   margin-bottom: 6px;
   color: #24324b;
   font-weight: 700;
-  background: rgba(122, 167, 255, 0.08);
+  background: rgba(238, 243, 249, 0.98);
 }
 
 .tree-root-title {
   flex: 1 1 auto;
   min-width: 0;
+  position: sticky;
+  left: 8px;
+  z-index: 6;
+  background: rgba(238, 243, 249, 0.98);
 }
 
 ul.file-tree,
@@ -844,8 +851,8 @@ details[open] > ul {
   }
 
   .tree-root-line {
-    min-width: 100%;
-    width: 100%;
+    min-width: calc(100vw - 48px);
+    width: max-content;
   }
 
   .tree-item {

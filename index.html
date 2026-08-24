@@ -117,7 +117,7 @@
           throw new Error(`manifest.json 请求失败：${response.status}`);
         }
         const manifest = await response.json();
-        document.title = manifest.rootName ? `${manifest.rootName} · Typora Notes` : 'Typora Notes';
+        document.title = 'G00DB0Y-Blogs';
         totalPostsEl.textContent = manifest.totalPosts ?? 0;
         totalCategoriesEl.textContent = manifest.totalCategories ?? 0;
         latestUpdatedEl.textContent = manifest.latestUpdatedAt || '—';

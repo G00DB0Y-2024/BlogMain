@@ -344,12 +344,6 @@ details > summary::-webkit-details-marker {
   color: var(--heading-color);
 }
 
-.tree-item-main {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .directory-item {
   font-weight: 650;
   color: var(--heading-color);
@@ -872,7 +866,7 @@ details[open] > ul {
 
   .tree-root-title,
   .tree-node-title {
-    display: inline;
+    display: block;
   }
 
   .tree-node-meta {
@@ -880,27 +874,8 @@ details[open] > ul {
   }
 
   .tree-item {
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
-  .tree-item-main {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    flex-wrap: wrap;
-  }
-
-  .arrow,
-  .icon {
-    flex-shrink: 0;
-  }
-
-  .tree-title-scroll {
-    flex: 1 1 auto;
-    min-width: 40%;
-    white-space: normal;
-    word-break: break-word;
+    width: max-content;
+    min-width: 100%;
   }
 
   .viewer-page {

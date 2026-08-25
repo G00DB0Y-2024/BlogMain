@@ -112,7 +112,7 @@ textarea {
   letter-spacing: -0.02em;
   text-align: center;
   margin-top: 30px;
-  text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .hero-subtitle {
@@ -122,6 +122,7 @@ textarea {
   font-size: 0.95rem;
   text-align: center;
   line-height: 1.65;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 /* ===== Home Page: Main Grid ===== */

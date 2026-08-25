@@ -843,8 +843,8 @@ details[open] > ul {
   }
 
   .tree-wrap {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: visible;
+    overflow-y: visible;
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-x: contain;
@@ -856,7 +856,7 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: max-content;
+    min-width: 0;
     padding-right: 0;
   }
 
@@ -874,8 +874,9 @@ details[open] > ul {
   }
 
   .tree-item {
-    width: max-content;
-    min-width: 100%;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
   }
 
   .viewer-page {

@@ -787,6 +787,10 @@ details[open] > ul {
     min-height: 160px;
   }
 
+  .hero::before {
+    background-image: url("./assets/backen_small.png");
+  }
+
   .hero-inner {
     min-height: 160px;
   }

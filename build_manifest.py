@@ -5,6 +5,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -164,16 +165,32 @@ def maybe_git(args: list[str], check: bool = False) -> subprocess.CompletedProce
 
 
 def auto_push(commit_message: str) -> None:
-    maybe_git(['add', '-A'], check=True)
-    status = maybe_git(['status', '--porcelain']).stdout.strip()
-    if not status:
-        print('No changes to commit.')
-        return
+    try:
+        maybe_git(['add', '-A'], check=True)
+        status = maybe_git(['status', '--porcelain']).stdout.strip()
+        if not status:
+            print('No changes to commit.')
+            return
 
-    maybe_git(['commit', '-m', commit_message], check=True)
-    branch = maybe_git(['branch', '--show-current']).stdout.strip() or 'master'
-    maybe_git(['push', '-u', 'origin', branch], check=True)
-    print(f'Pushed branch {branch} to origin.')
+        maybe_git(['commit', '-m', commit_message], check=True)
+        branch = maybe_git(['branch', '--show-current']).stdout.strip() or 'master'
+        result = maybe_git(['push', '-u', 'origin', branch], check=True)
+        print(result.stdout.strip())
+        print(f'Pushed branch {branch} to origin.')
+    except subprocess.CalledProcessError as exc:
+        print(f'\n[错误] git 操作失败: {exc}', file=sys.stderr)
+        if exc.stdout:
+            print('--- stdout ---', file=sys.stderr)
+            print(exc.stdout, file=sys.stderr)
+        if exc.stderr:
+            print('--- stderr ---', file=sys.stderr)
+            print(exc.stderr, file=sys.stderr)
+        print('\n按 Enter 键退出...')
+        try:
+            input()
+        except EOFError:
+            pass
+        raise SystemExit(1)
 
 
 def build_manifest() -> dict:

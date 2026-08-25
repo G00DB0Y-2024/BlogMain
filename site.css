@@ -85,7 +85,11 @@ textarea {
 }
 
 .hero::after {
-  content: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
 }
 
 .hero-inner {
@@ -108,27 +112,23 @@ textarea {
 }
 
 .hero-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  background: #fff center/cover no-repeat;
-  box-shadow: 0 1px 4px var(--shadow-light);
+  display: none;
 }
 
 .hero-title {
   margin: 0;
-  color: var(--heading-color);
+  color: #fff;
   font-size: clamp(2rem, 4vw, 2.4rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
   margin: 0;
   max-width: 760px;
-  color: var(--text-color);
+  color: #fff;
   font-size: 0.95rem;
   text-align: center;
   line-height: 1.65;
@@ -173,11 +173,7 @@ textarea {
 }
 
 .profile-cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 40%, rgba(255, 255, 255, 0.14) 100%);
-  pointer-events: none;
+  content: none;
 }
 
 .profile-meta {

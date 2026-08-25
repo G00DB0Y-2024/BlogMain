@@ -91,7 +91,7 @@
       const label = node.title || node.name.replace(/\.md$/i, '');
       const title = escapeHtml(label);
       const meta = escapeHtml(metaText(node));
-      return `<li><a class="tree-item file-item" role="treeitem" aria-label="${title}" href="${buildViewerUrl(node.path)}" target="_blank" rel="noopener noreferrer"><span class="tree-marker" aria-hidden="true">·</span><span class="tree-label">${title}</span><span class="tree-meta">${meta}</span></a></li>`;
+      return `<li><a class="tree-item file-item" role="treeitem" aria-label="${title}" href="${buildViewerUrl(node.path)}" target="_blank" rel="noopener noreferrer"><span class="tree-marker" aria-hidden="true">●</span><span class="tree-label">${title}</span><span class="tree-meta">${meta}</span></a></li>`;
     }
 
     function renderNodes(nodes, depth = 0) {

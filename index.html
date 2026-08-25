@@ -66,7 +66,6 @@
     const totalCategoriesEl = document.querySelector('#total-categories');
     const latestUpdatedEl = document.querySelector('#latest-updated');
     const generatedAtEl = document.querySelector('#generated-at');
-    const rootNameEl = document.querySelector('#root-name');
 
     function metaText(node) {
       if (node.type === 'directory') {
@@ -136,7 +135,6 @@
         totalPostsEl.textContent = manifest.totalPosts ?? 0;
         totalCategoriesEl.textContent = manifest.totalCategories ?? 0;
         latestUpdatedEl.textContent = manifest.latestUpdatedAt || '—';
-        rootNameEl.textContent = manifest.rootName || 'BlogMain';
         generatedAtEl.textContent = manifest.generatedAt
           ? `Index generated at ${formatTimestamp(manifest.generatedAt)}`
           : 'Static directory index';

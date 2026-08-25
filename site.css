@@ -867,8 +867,6 @@ details[open] > ul {
   .tree-root-title,
   .tree-node-title {
     display: inline;
-    white-space: normal;
-    word-break: break-word;
   }
 
   .tree-node-meta {
@@ -876,20 +874,20 @@ details[open] > ul {
   }
 
   .tree-item {
-    flex-wrap: nowrap;
-    overflow: hidden;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .arrow,
+  .icon {
+    flex-shrink: 0;
   }
 
   .tree-title-scroll {
-    flex: 0 1 auto;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .tree-node-title {
-    white-space: nowrap;
+    flex: 1 1 auto;
+    min-width: 40%;
+    white-space: normal;
+    word-break: break-word;
   }
 
   .viewer-page {

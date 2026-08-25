@@ -383,8 +383,8 @@ details[open] > summary .arrow {
 }
 
 .tree-title-scroll {
-  flex: 0 0 auto;
-  min-width: max-content;
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: visible;
   padding: 0 16px 0 0;
   margin: 0;
@@ -396,8 +396,8 @@ details[open] > summary .arrow {
 
 .tree-node-title {
   display: inline-block;
-  min-width: max-content;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .tree-node-meta {

@@ -843,7 +843,7 @@ details[open] > ul {
   }
 
   .tree-wrap {
-    overflow-x: visible;
+    overflow-x: auto;
     overflow-y: visible;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -883,10 +883,9 @@ details[open] > ul {
   }
 
   .tree-title-scroll {
-    flex: 0 1 auto;
-    width: calc(100% - 28px);
+    flex: 1 1 auto;
+    min-width: 120px;
     padding-right: 0;
-    min-width: 0;
   }
 
   .viewer-page {

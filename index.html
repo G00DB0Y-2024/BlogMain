@@ -112,16 +112,35 @@
       const rootLine = document.querySelector('.tree-root-line');
       const treeWrap = document.querySelector('.tree-wrap');
       if (!rootLine || !treeWrap) return;
-      const w = treeWrap.scrollWidth;
-      rootLine.style.width = `${w}px`;
-      rootLine.style.minWidth = `${w}px`;
+
+      const scrollWidth = treeWrap.scrollWidth;
+      const clientWidth = treeWrap.clientWidth;
+
+      if (scrollWidth > clientWidth) {
+        rootLine.style.width = `${scrollWidth}px`;
+        rootLine.style.minWidth = `${scrollWidth}px`;
+      } else {
+        rootLine.style.width = '100%';
+        rootLine.style.minWidth = '0';
+      }
     }
 
     function bindTreeResize() {
+      const treeWrap = document.querySelector('.tree-wrap');
+      if (!treeWrap) return;
+
       treeEl.addEventListener('toggle', () => {
         requestAnimationFrame(syncRootLineWidthMobile);
       }, true);
-      window.addEventListener('resize', syncRootLineWidthMobile);
+
+      window.addEventListener('resize', () => {
+        requestAnimationFrame(syncRootLineWidthMobile);
+      });
+
+      const resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(syncRootLineWidthMobile);
+      });
+      resizeObserver.observe(treeWrap);
     }
 
     async function init() {

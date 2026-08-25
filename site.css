@@ -117,18 +117,18 @@ textarea {
 
 .hero-title {
   margin: 0;
-  color: #fff;
+  color: #111;
   font-size: clamp(2rem, 4vw, 2.4rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   text-align: center;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.8);
 }
 
 .hero-subtitle {
   margin: 0;
   max-width: 760px;
-  color: #fff;
+  color: #333;
   font-size: 0.95rem;
   text-align: center;
   line-height: 1.65;
@@ -165,9 +165,11 @@ textarea {
   height: 330px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
-  background:
-    #ffffff,
-    url("./assets/profile.png") center/auto 100% no-repeat;
+  background-color: #ffffff;
+  background-image: url("./assets/profile.png");
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
   overflow: hidden;
   box-shadow: 0 1px 3px var(--shadow-light);
 }
@@ -295,7 +297,7 @@ textarea {
 .tree-root-line .tree-node-meta {
   flex: 0 0 90px;
   width: 90px;
-  margin-left: 0;
+  margin-left: auto;
   padding-right: 12px;
   text-align: right;
 }

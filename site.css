@@ -79,23 +79,7 @@ textarea {
   background: url("./assets/backen.png") center/cover no-repeat;
   background-position: center 40%;
   transition: all 0.15s ease;
-}
-
-.hero:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.5);
-  transition: all 0.15s ease;
-  pointer-events: none;
-}
-
-.hero:hover::after {
-  background: rgba(255, 255, 255, 0);
 }
 
 .hero-inner {
@@ -128,6 +112,8 @@ textarea {
   letter-spacing: -0.02em;
   text-align: center;
   margin-top: 30px;
+  -webkit-text-stroke: 1px white;
+  text-stroke: 1px white;
 }
 
 .hero-subtitle {

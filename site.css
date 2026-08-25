@@ -868,6 +868,22 @@ details[open] > ul {
     display: none;
   }
 
+  .tree-root-title {
+    display: none;
+  }
+
+  .tree-node-title {
+    display: none;
+  }
+
+  .tree-root-line .tree-node-meta {
+    flex: 0 0 82px;
+    width: 82px;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
+
   .tree-item {
     width: max-content;
     min-width: 100%;

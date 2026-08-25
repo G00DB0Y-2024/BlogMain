@@ -805,6 +805,11 @@ details[open] > ul {
   }
 
   .hero {
+    width: 100%;
+    left: auto;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
     min-height: 160px;
   }
 

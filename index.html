@@ -106,12 +106,23 @@
       return `<ul class="file-tree${depth === 0 ? ' root-tree' : ''}" role="${depth === 0 ? 'tree' : 'group'}">${items}</ul>`;
     }
 
+    const MOBILE_BREAKPOINT = 640;
+
+    function syncRootLineWidthMobile() {
+      if (window.innerWidth > MOBILE_BREAKPOINT) return;
+      const rootLine = document.querySelector('.tree-root-line');
+      const treeWrap = document.querySelector('.tree-wrap');
+      if (!rootLine || !treeWrap) return;
+      const w = treeWrap.clientWidth;
+      rootLine.style.width = `${w}px`;
+      rootLine.style.minWidth = `${w}px`;
+    }
+
     function bindTreeResize() {
       treeEl.addEventListener('toggle', () => {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {});
-        });
+        requestAnimationFrame(syncRootLineWidthMobile);
       }, true);
+      window.addEventListener('resize', syncRootLineWidthMobile);
     }
 
     async function init() {

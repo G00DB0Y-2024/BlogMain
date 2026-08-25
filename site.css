@@ -80,7 +80,7 @@ textarea {
   margin-left: -50vw;
   margin-right: -50vw;
   min-height: 280px;
-  background: url("./assets/main-field1.png") center/cover no-repeat;
+  background: url("./assets/backen.png") center/cover no-repeat;
   background-position: center 40%;
 }
 
@@ -166,9 +166,8 @@ textarea {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   background:
-    linear-gradient(180deg, rgba(122, 167, 255, 0.14), rgba(122, 167, 255, 0.02)),
-    url("./assets/profile.png") center/auto 100% no-repeat,
-    linear-gradient(180deg, #cfe0ff, #eef4ff);
+    #ffffff,
+    url("./assets/profile.png") center/auto 100% no-repeat;
   overflow: hidden;
   box-shadow: 0 1px 3px var(--shadow-light);
 }

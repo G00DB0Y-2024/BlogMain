@@ -288,6 +288,7 @@ textarea {
   border-bottom: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .tree-root-title {
@@ -311,6 +312,7 @@ ul.file-tree ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  min-width: 100%;
 }
 
 ul.file-tree ul {

@@ -112,8 +112,7 @@ textarea {
   letter-spacing: -0.02em;
   text-align: center;
   margin-top: 30px;
-  -webkit-text-stroke: 1px white;
-  text-stroke: 1px white;
+  text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
 }
 
 .hero-subtitle {

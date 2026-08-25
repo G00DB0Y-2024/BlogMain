@@ -152,7 +152,15 @@ def maybe_git(args: list[str], check: bool = False) -> subprocess.CompletedProce
     git = shutil.which('git')
     if not git:
         raise RuntimeError('git 未安装或不在 PATH 中')
-    return subprocess.run([git, *args], cwd=ROOT, text=True, capture_output=True, check=check)
+    return subprocess.run(
+        [git, *args],
+        cwd=ROOT,
+        text=True,
+        encoding='utf-8',
+        errors='replace',
+        capture_output=True,
+        check=check,
+    )
 
 
 def auto_push(commit_message: str) -> None:

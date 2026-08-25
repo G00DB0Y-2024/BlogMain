@@ -355,10 +355,10 @@ details > summary::-webkit-details-marker {
 
 .arrow {
   display: inline-block;
-  flex: 0 0 20px;
-  width: 20px;
+  flex: 0 0 16px;
+  width: 16px;
   color: var(--meta-color);
-  font-size: 0.75rem;
+  font-size: 0.66rem;
   line-height: 1;
   transition: transform 0.2s ease;
 }
@@ -844,7 +844,7 @@ details[open] > ul {
 
   .tree-wrap {
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-x: contain;
@@ -856,7 +856,7 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: 0;
+    min-width: max-content;
     padding-right: 0;
   }
 
@@ -866,9 +866,7 @@ details[open] > ul {
 
   .tree-root-title,
   .tree-node-title {
-    display: inline;
-    white-space: normal;
-    word-break: break-word;
+    display: block;
   }
 
   .tree-node-meta {
@@ -876,16 +874,8 @@ details[open] > ul {
   }
 
   .tree-item {
-    width: 100%;
-    min-width: 0;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
-  .tree-title-scroll {
-    flex: 1 1 200px;
-    min-width: 200px;
-    padding-right: 0;
+    width: max-content;
+    min-width: 100%;
   }
 
   .viewer-page {

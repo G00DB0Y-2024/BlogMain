@@ -883,8 +883,8 @@ details[open] > ul {
   }
 
   .tree-title-scroll {
-    flex: 1 1 auto;
-    min-width: 120px;
+    flex: 1 1 200px;
+    min-width: 200px;
     padding-right: 0;
   }
 

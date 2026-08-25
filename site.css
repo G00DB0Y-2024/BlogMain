@@ -344,6 +344,12 @@ details > summary::-webkit-details-marker {
   color: var(--heading-color);
 }
 
+.tree-item-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .directory-item {
   font-weight: 650;
   color: var(--heading-color);
@@ -876,6 +882,13 @@ details[open] > ul {
   .tree-item {
     flex-wrap: wrap;
     align-items: flex-start;
+  }
+
+  .tree-item-main {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
   }
 
   .arrow,

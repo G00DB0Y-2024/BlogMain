@@ -41,7 +41,7 @@ body {
 }
 
 body.home-page {
-  padding: 24px 16px 40px;
+  padding: 0 0 40px;
 }
 
 body.viewer-page {
@@ -74,8 +74,12 @@ textarea {
 /* ===== Home Page: Hero ===== */
 .hero {
   position: relative;
-  overflow: hidden;
-  min-height: 240px;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  min-height: 280px;
   background: url("./assets/main-field1.png") center/cover no-repeat;
   background-position: center 40%;
 }
@@ -163,7 +167,7 @@ textarea {
   border: 1px solid var(--border-color);
   background:
     linear-gradient(180deg, rgba(122, 167, 255, 0.14), rgba(122, 167, 255, 0.02)),
-    url("./assets/profile.png") center/cover no-repeat,
+    url("./assets/profile.png") center/auto 100% no-repeat,
     linear-gradient(180deg, #cfe0ff, #eef4ff);
   overflow: hidden;
   box-shadow: 0 1px 3px var(--shadow-light);

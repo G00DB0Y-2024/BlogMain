@@ -73,9 +73,7 @@ textarea {
 
 /* ===== Home Page: Hero ===== */
 .hero {
-  position: absolute;
-  left: 0;
-  right: 0;
+  width: 100%;
   min-height: 280px;
   background: url("./assets/backen.png") center/cover no-repeat;
   background-position: center 40%;
@@ -83,21 +81,17 @@ textarea {
 
 .hero::after {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.5);
-  pointer-events: none;
+  position: relative;
+  display: block;
+  height: 0;
 }
 
 .hero-inner {
-  position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 240px;
   padding: 28px 24px;
-  width: 100%;
 }
 
 .hero-card {

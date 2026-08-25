@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A quiet index of Typora notes.">
-  <title>G00DB0Y-Blogs</title>
+  <title>Crystal-Blogs</title>
   <link rel="stylesheet" href="./site.css">
 </head>
 <body class="home-page">
@@ -131,7 +131,7 @@
           throw new Error(`manifest.json 请求失败：${response.status}`);
         }
         const manifest = await response.json();
-        document.title = 'G00DB0Y-Blogs';
+        document.title = 'Crystal-Blogs';
         totalPostsEl.textContent = manifest.totalPosts ?? 0;
         totalCategoriesEl.textContent = manifest.totalCategories ?? 0;
         latestUpdatedEl.textContent = manifest.latestUpdatedAt || '—';

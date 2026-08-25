@@ -51,13 +51,11 @@ body.viewer-page {
 a {
   color: var(--link-color);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 a:hover {
   color: var(--link-hover);
-  border-bottom-color: var(--link-hover);
 }
 
 button,
@@ -76,10 +74,18 @@ textarea {
   position: relative;
   width: 100%;
   min-height: 280px;
-  background: url("./assets/backen.png") center/cover no-repeat;
   background-position: center 40%;
   transition: all 0.15s ease;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("./assets/backen.png") center/cover no-repeat;
+  opacity: 0.75;
+  z-index: 0;
 }
 
 .hero-inner {
@@ -208,7 +214,7 @@ textarea {
 .stat-value {
   display: block;
   color: var(--heading-color);
-  font-size: 1.05rem;
+  font-size: 13.5px;
   font-weight: 700;
 }
 

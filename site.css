@@ -75,11 +75,9 @@ textarea {
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: 160px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, #ffffff, #fbfcfe);
-  box-shadow: 0 1px 3px var(--shadow-light);
+  min-height: 240px;
+  background: url("./assets/main-field1.png") center/cover no-repeat;
+  background-position: center 40%;
 }
 
 .hero::after {
@@ -92,8 +90,9 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
+  min-height: 240px;
   padding: 28px 24px;
+  width: 100%;
 }
 
 .hero-card {
@@ -164,7 +163,7 @@ textarea {
   border: 1px solid var(--border-color);
   background:
     linear-gradient(180deg, rgba(122, 167, 255, 0.14), rgba(122, 167, 255, 0.02)),
-    url("./assets/profile.jpg") center/cover no-repeat,
+    url("./assets/profile.png") center/cover no-repeat,
     linear-gradient(180deg, #cfe0ff, #eef4ff);
   overflow: hidden;
   box-shadow: 0 1px 3px var(--shadow-light);

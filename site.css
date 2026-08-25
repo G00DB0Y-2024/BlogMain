@@ -297,7 +297,7 @@ textarea {
   padding-right: 16px;
 }
 
-.tree-root-line .tree-node-meta {
+.tree-root-line .tree-meta {
   flex: 0 0 90px;
   width: 90px;
   margin-left: auto;
@@ -359,54 +359,31 @@ details > summary::-webkit-details-marker {
   color: var(--text-color);
 }
 
-.arrow {
-  display: inline-block;
-  flex: 0 0 20px;
+.tree-marker {
+  flex: 0 0 auto;
   width: 20px;
   color: var(--meta-color);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   line-height: 1;
   transition: transform 0.2s ease;
 }
 
-details[open] > summary .arrow {
+.file-item .tree-marker {
+  color: #88a9e8;
+}
+
+details[open] > summary .tree-marker {
   transform: rotate(90deg);
 }
 
-.file-item > .arrow {
-  visibility: hidden;
-}
-
-.icon {
-  flex: 0 0 auto;
-  color: #88a9e8;
-  font-size: 1rem;
-  margin-right: 1px;
-}
-
-.file-item .icon {
-  color: var(--meta-color);
-}
-
-.tree-title-scroll {
+.tree-label {
   flex: 1 1 auto;
   min-width: 0;
-  overflow: visible;
-  padding: 0 16px 0 0;
-  margin: 0;
-}
-
-.tree-item .tree-title-scroll {
-  flex: 1 1 auto;
-}
-
-.tree-node-title {
-  display: inline-block;
   white-space: normal;
   word-break: break-word;
 }
 
-.tree-node-meta {
+.tree-meta {
   flex: 0 0 90px;
   width: 90px;
   margin-left: auto;
@@ -845,7 +822,7 @@ details[open] > ul {
 
   .tree {
     font-size: 0.88rem;
-    padding: 14px 10px 16px;
+    padding: 14px 6px 16px;
   }
 
   .tree-wrap {
@@ -854,7 +831,6 @@ details[open] > ul {
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-x: contain;
-    padding-right: 0;
   }
 
   .tree-wrap::-webkit-scrollbar {
@@ -862,26 +838,30 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: max-content;
-    padding-right: 0;
+    min-width: 500px;
   }
 
   .tree-root-line {
     width: 100%;
   }
 
-  .tree-root-title,
-  .tree-node-title {
+  .tree-label {
     display: block;
   }
 
-  .tree-node-meta {
+  .tree-meta {
     display: none;
   }
 
   .tree-item {
     width: max-content;
-    min-width: 100%;
+    max-width: 500px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .tree-marker {
+    flex-shrink: 0;
   }
 
   .viewer-page {

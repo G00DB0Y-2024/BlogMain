@@ -1,0 +1,96 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="第 1 页" id="jLLfa1QaakDzs0FEX7Ng">
+    <mxGraphModel dx="1093" dy="757" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-5" value="$$A_t$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="255" y="460" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-2" value="$$S_t$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="105" y="460" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-1" value="" style="shape=waypoint;sketch=0;fillStyle=solid;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" parent="1" vertex="1">
+          <mxGeometry x="130" y="450" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-3" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="150" y="460" as="sourcePoint" />
+            <mxPoint x="280" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-4" value="" style="shape=waypoint;sketch=0;fillStyle=solid;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" parent="1" vertex="1">
+          <mxGeometry x="280" y="450" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-14" value="$$S_{t+1}$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="394" y="460" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-15" value="" style="shape=waypoint;sketch=0;fillStyle=solid;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" parent="1" vertex="1">
+          <mxGeometry x="429" y="450" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-19" value="" style="endArrow=classic;html=1;rounded=0;curved=1;dashed=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="147" y="453" as="sourcePoint" />
+            <mxPoint x="436" y="455" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="200" y="440" />
+              <mxPoint x="260" y="436" />
+              <mxPoint x="340" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-20" value="$$T(S&#39;|S)$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#990000;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="293" y="411" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-21" value="Transition Description" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="1" vertex="1">
+          <mxGeometry x="468" y="430" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-23" value="$$(S_t, S_{t+1})$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="473" y="460" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-24" value="" style="shape=waypoint;sketch=0;fillStyle=solid;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" parent="1" vertex="1">
+          <mxGeometry x="523" y="450" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-28" value="" style="endArrow=classic;html=1;rounded=0;fillColor=#ffe6cc;strokeColor=#004C99;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="543" y="460" as="sourcePoint" />
+            <mxPoint x="606" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-29" value="$$R_{t}$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#004C99;" parent="1" vertex="1">
+          <mxGeometry x="576" y="445" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-31" value="" style="endArrow=classic;html=1;rounded=0;curved=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="612" y="473" as="sourcePoint" />
+            <mxPoint x="293" y="487" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="521" y="526" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-32" value="$$Q\left(s_{t}, a_{t}\right) \leftarrow Q\left(s_{t}, a_{t}\right)+\alpha\left[R_{t}+\gamma \max _{a} Q\left(s_{t+1}, a\right)-Q\left(s_{t}, a_{t}\right)\right]$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=7;" parent="1" vertex="1">
+          <mxGeometry x="240" y="510" width="480" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-34" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="460" as="sourcePoint" />
+            <mxPoint x="430" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-35" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="459.53" as="sourcePoint" />
+            <mxPoint x="525" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-36" value="$$a^*_t = \arg \max_{a \sim \pi(a \mid s_t)} Q(s_t, a)$$" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=7;" parent="1" vertex="1">
+          <mxGeometry x="204" y="500" width="190" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iaVruhkCsF6gIHzU5U9Z-38" value="MDP Model" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;" parent="1" vertex="1">
+          <mxGeometry x="348" y="411" width="80" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

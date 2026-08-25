@@ -1,9 +1,0 @@
-
-
-This paper proposes an offline optimization method Counterfactual Policy Boosting(CFPB) based on counterfactual inference and offline reinforcement learning for distributed routing in low earth orbit(LEO) satellite constellations, and introduced One-step Counterfactual Perturbed Trajectory Regret(CPTR1) to evaluate the current strategy and explore potential better paths and achieve the optimal counterfactual strategy by minimizing this trajectory regret. 
-
-The aim is to improve data utilization efficiency, reduce online deployment risks, and mitigate the extrapolation error and distributional shift issues inherent in offline reinforcement learning. This method addresses uncertainties in traffic and link states within satellite routing and optimizes routing strategies to minimize average E2E delay and loss rate via load balancing while satisfying system constraints. The optimization builds upon a static dataset collected by an arbitrary initial routing policy interacting with the environment. 
-
-The approach conducts imitation learning on the dataset policy, then constructs a structural model of state variables according to the queueing theory, and achieves counterfactual offline policy evaluation by estimating the noise of the given data.
-
-Experimental results demonstrate that the proposed method significantly reduces offline evaluation variance and achieves better routing performance compared to baseline methods. Furthermore, scalability generalization experiments and traffic sensitivity show that the method maintains robust optimization performance and stable extrapolation within a reasonable range.

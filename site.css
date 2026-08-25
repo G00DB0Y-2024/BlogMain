@@ -839,7 +839,7 @@ details[open] > ul {
 
   .tree {
     font-size: 0.88rem;
-    padding: 14px 10px 16px;
+    padding: 14px 6px 16px;
   }
 
   .tree-wrap {
@@ -848,7 +848,6 @@ details[open] > ul {
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior-x: contain;
-    padding-right: 0;
   }
 
   .tree-wrap::-webkit-scrollbar {
@@ -856,26 +855,35 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: max-content;
-    padding-right: 0;
+    min-width: 500px;
   }
 
   .tree-root-line {
     width: 100%;
   }
 
-  .tree-root-title,
-  .tree-node-title {
-    display: block;
+  .tree-item {
+    width: max-content;
+    max-width: 500px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .tree-item-main {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .tree-title-scroll {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: normal;
+    word-break: break-word;
   }
 
   .tree-node-meta {
     display: none;
-  }
-
-  .tree-item {
-    width: max-content;
-    min-width: 100%;
   }
 
   .viewer-page {

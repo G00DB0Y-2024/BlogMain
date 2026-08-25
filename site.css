@@ -122,7 +122,7 @@ textarea {
   font-weight: 700;
   letter-spacing: -0.02em;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .hero-subtitle {
@@ -297,6 +297,7 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 16px;
 }
 
 .tree-root-line .tree-node-meta {

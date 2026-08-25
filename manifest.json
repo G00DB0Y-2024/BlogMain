@@ -1,11 +1,34 @@
 {
-  "generatedAt": "2026-08-25T14:48:04.794082+08:00",
+  "generatedAt": "2026-08-25T19:57:35.660356+08:00",
   "rootName": "notes",
   "contentRoot": "notes",
-  "totalPosts": 45,
-  "totalCategories": 6,
-  "latestUpdatedAt": "2026-06-13",
+  "totalPosts": 47,
+  "totalCategories": 7,
+  "latestUpdatedAt": "2026-08-25",
   "tree": [
+    {
+      "type": "directory",
+      "name": "后训练与强化学习",
+      "path": "后训练与强化学习",
+      "count": 2,
+      "mtime": "2026-08-25T19:56:49.779382+08:00",
+      "children": [
+        {
+          "type": "file",
+          "name": "后训练与强化学习 (一).md",
+          "title": "后训练与强化学习 (一)",
+          "path": "后训练与强化学习/后训练与强化学习 (一).md",
+          "mtime": "2026-08-25T19:56:49.779382+08:00"
+        },
+        {
+          "type": "file",
+          "name": "后训练与强化学习 (二).md",
+          "title": "后训练与强化学习 (二)",
+          "path": "后训练与强化学习/后训练与强化学习 (二).md",
+          "mtime": "2026-08-25T19:54:42.516864+08:00"
+        }
+      ]
+    },
     {
       "type": "directory",
       "name": "因果; CRL; C-Routine",

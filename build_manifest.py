@@ -198,8 +198,8 @@ def main() -> int:
     MANIFEST_PATH.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'Wrote {MANIFEST_PATH.relative_to(ROOT).as_posix()}')
 
-    if args.push:
-        auto_push(args.message)
+  
+    auto_push(args.message)
 
     return 0
 

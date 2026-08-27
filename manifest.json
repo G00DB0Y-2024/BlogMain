@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-25T20:01:21.692653+08:00",
+  "generatedAt": "2026-08-27T14:18:24.626466+08:00",
   "rootName": "notes",
   "contentRoot": "notes",
-  "totalPosts": 47,
-  "totalCategories": 7,
-  "latestUpdatedAt": "2026-08-25",
+  "totalPosts": 48,
+  "totalCategories": 5,
+  "latestUpdatedAt": "2026-08-27",
   "tree": [
     {
       "type": "directory",
@@ -31,111 +31,111 @@
     },
     {
       "type": "directory",
-      "name": "因果; CRL; C-Routine",
-      "path": "因果; CRL; C-Routine",
-      "count": 13,
-      "mtime": "2026-03-16T16:08:27.843204+08:00",
-      "children": [
-        {
-          "type": "file",
-          "name": "00 history.md",
-          "title": "记录一些废除的推导",
-          "path": "因果; CRL; C-Routine/00 history.md",
-          "mtime": "2025-10-30T19:22:02.676494+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-08-30-想法.md",
-          "title": "2025-08-30-想法",
-          "path": "因果; CRL; C-Routine/2025-08-30-想法.md",
-          "mtime": "2025-09-03T11:30:40.418407+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-09-09-想法(Updated).md",
-          "title": "2025-09-09-想法(Updated)",
-          "path": "因果; CRL; C-Routine/2025-09-09-想法(Updated).md",
-          "mtime": "2025-09-12T16:46:57.966693+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-09-16-想法(Lastest).md",
-          "title": "线性效应假设下的建模",
-          "path": "因果; CRL; C-Routine/2025-09-16-想法(Lastest).md",
-          "mtime": "2025-09-25T14:10:13.483617+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-09-16-想法的疑点论证.md",
-          "title": "2025-09-16-想法的疑点论证",
-          "path": "因果; CRL; C-Routine/2025-09-16-想法的疑点论证.md",
-          "mtime": "2025-09-24T18:05:20.585605+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-09-24-数据搜集结构.md",
-          "title": "数据搜集结构",
-          "path": "因果; CRL; C-Routine/2025-09-24-数据搜集结构.md",
-          "mtime": "2025-09-25T10:46:03.008313+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-09-25-新的想法, 基于排队论.md",
-          "title": "新的想法(2025-09-25)",
-          "path": "因果; CRL; C-Routine/2025-09-25-新的想法, 基于排队论.md",
-          "mtime": "2026-03-16T16:08:27.843204+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-10-10-反事实推断.md",
-          "title": "2025-10-10-反事实推断",
-          "path": "因果; CRL; C-Routine/2025-10-10-反事实推断.md",
-          "mtime": "2025-10-11T09:20:30.184804+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning.md",
-          "title": "2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning",
-          "path": "因果; CRL; C-Routine/2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning.md",
-          "mtime": "2025-10-21T20:24:56.001231+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-10-22-CAF方法-全工作流程.md",
-          "title": "2025-10-22-CAF方法-全工作流程",
-          "path": "因果; CRL; C-Routine/2025-10-22-CAF方法-全工作流程.md",
-          "mtime": "2025-10-30T21:01:08.777044+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-10-30-CAF方法-知识反事实.md",
-          "title": "2025-10-30-CAF方法-知识反事实",
-          "path": "因果; CRL; C-Routine/2025-10-30-CAF方法-知识反事实.md",
-          "mtime": "2025-11-06T10:37:36.568742+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-7-31-细读Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach.md",
-          "title": "Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach",
-          "path": "因果; CRL; C-Routine/2025-7-31-细读Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach.md",
-          "mtime": "2025-08-30T11:39:03.967120+08:00"
-        },
-        {
-          "type": "file",
-          "name": "★2025-8-6-关于因果迁移思考.md",
-          "title": "因果迁移问题的思考",
-          "path": "因果; CRL; C-Routine/★2025-8-6-关于因果迁移思考.md",
-          "mtime": "2025-08-08T12:39:34.436188+08:00"
-        }
-      ]
-    },
-    {
-      "type": "directory",
       "name": "强化学习",
       "path": "强化学习",
-      "count": 11,
+      "count": 24,
       "mtime": "2026-06-13T16:43:00.517711+08:00",
       "children": [
+        {
+          "type": "directory",
+          "name": "因果; CRL; C-Routine",
+          "path": "强化学习/因果; CRL; C-Routine",
+          "count": 13,
+          "mtime": "2026-03-16T16:08:27.843204+08:00",
+          "children": [
+            {
+              "type": "file",
+              "name": "00 history.md",
+              "title": "记录一些废除的推导",
+              "path": "强化学习/因果; CRL; C-Routine/00 history.md",
+              "mtime": "2025-10-30T19:22:02.676494+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-08-30-想法.md",
+              "title": "2025-08-30-想法",
+              "path": "强化学习/因果; CRL; C-Routine/2025-08-30-想法.md",
+              "mtime": "2025-09-03T11:30:40.418407+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-09-09-想法(Updated).md",
+              "title": "2025-09-09-想法(Updated)",
+              "path": "强化学习/因果; CRL; C-Routine/2025-09-09-想法(Updated).md",
+              "mtime": "2025-09-12T16:46:57.966693+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-09-16-想法(Lastest).md",
+              "title": "线性效应假设下的建模",
+              "path": "强化学习/因果; CRL; C-Routine/2025-09-16-想法(Lastest).md",
+              "mtime": "2025-09-25T14:10:13.483617+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-09-16-想法的疑点论证.md",
+              "title": "2025-09-16-想法的疑点论证",
+              "path": "强化学习/因果; CRL; C-Routine/2025-09-16-想法的疑点论证.md",
+              "mtime": "2025-09-24T18:05:20.585605+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-09-24-数据搜集结构.md",
+              "title": "数据搜集结构",
+              "path": "强化学习/因果; CRL; C-Routine/2025-09-24-数据搜集结构.md",
+              "mtime": "2025-09-25T10:46:03.008313+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-09-25-新的想法, 基于排队论.md",
+              "title": "新的想法(2025-09-25)",
+              "path": "强化学习/因果; CRL; C-Routine/2025-09-25-新的想法, 基于排队论.md",
+              "mtime": "2026-03-16T16:08:27.843204+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-10-10-反事实推断.md",
+              "title": "2025-10-10-反事实推断",
+              "path": "强化学习/因果; CRL; C-Routine/2025-10-10-反事实推断.md",
+              "mtime": "2025-10-11T09:20:30.184804+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning.md",
+              "title": "2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning",
+              "path": "强化学习/因果; CRL; C-Routine/2025-10-10-论文细读Counterfactual Credit Assignment in Model-Free Reinforcement Learning.md",
+              "mtime": "2025-10-21T20:24:56.001231+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-10-22-CAF方法-全工作流程.md",
+              "title": "2025-10-22-CAF方法-全工作流程",
+              "path": "强化学习/因果; CRL; C-Routine/2025-10-22-CAF方法-全工作流程.md",
+              "mtime": "2025-10-30T21:01:08.777044+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-10-30-CAF方法-知识反事实.md",
+              "title": "2025-10-30-CAF方法-知识反事实",
+              "path": "强化学习/因果; CRL; C-Routine/2025-10-30-CAF方法-知识反事实.md",
+              "mtime": "2025-11-06T10:37:36.568742+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-7-31-细读Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach.md",
+              "title": "Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach",
+              "path": "强化学习/因果; CRL; C-Routine/2025-7-31-细读Estimating and Mitigating the Congestion Effect of Curbside Pick-ups and Drop-offs  A Causal Inference Approach.md",
+              "mtime": "2025-08-30T11:39:03.967120+08:00"
+            },
+            {
+              "type": "file",
+              "name": "★2025-8-6-关于因果迁移思考.md",
+              "title": "因果迁移问题的思考",
+              "path": "强化学习/因果; CRL; C-Routine/★2025-8-6-关于因果迁移思考.md",
+              "mtime": "2025-08-08T12:39:34.436188+08:00"
+            }
+          ]
+        },
         {
           "type": "file",
           "name": "2025-09-12-离线强化学习综述.md",
@@ -217,38 +217,17 @@
     },
     {
       "type": "directory",
-      "name": "文献精读",
-      "path": "文献精读",
-      "count": 4,
-      "mtime": "2025-03-21T10:24:52.982276+08:00",
+      "name": "推荐系统王树森",
+      "path": "推荐系统王树森",
+      "count": 1,
+      "mtime": "2026-08-27T10:39:10.500895+08:00",
       "children": [
         {
           "type": "file",
-          "name": "2025-2-22论文精读.md",
-          "title": "论文精读：分布式卫星路由的持续深度强化学习",
-          "path": "文献精读/2025-2-22论文精读.md",
-          "mtime": "2025-03-18T15:28:22.694980+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-2-26论文精读.md",
-          "title": "论文精读：低轨道卫星星座的节能分层协同学习",
-          "path": "文献精读/2025-2-26论文精读.md",
-          "mtime": "2025-02-27T10:11:21.792786+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-2-27论文精读.md",
-          "title": "论文精读：分解与元-DRL 基于的 6G 卫星系统中异步联邦学习的多目标优化",
-          "path": "文献精读/2025-2-27论文精读.md",
-          "mtime": "2025-02-28T11:00:33.194019+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-3-13论文精读：GENOME+.md",
-          "title": "2025-3-13论文精读",
-          "path": "文献精读/2025-3-13论文精读：GENOME+.md",
-          "mtime": "2025-03-21T10:24:52.982276+08:00"
+          "name": "推荐系统.md",
+          "title": "推荐系统",
+          "path": "推荐系统王树森/推荐系统.md",
+          "mtime": "2026-08-27T10:39:10.500895+08:00"
         }
       ]
     },
@@ -256,9 +235,76 @@
       "type": "directory",
       "name": "星座路由",
       "path": "星座路由",
-      "count": 4,
+      "count": 11,
       "mtime": "2025-09-14T12:21:33.410173+08:00",
       "children": [
+        {
+          "type": "directory",
+          "name": "文献精读",
+          "path": "星座路由/文献精读",
+          "count": 4,
+          "mtime": "2025-03-21T10:24:52.982276+08:00",
+          "children": [
+            {
+              "type": "file",
+              "name": "2025-2-22论文精读.md",
+              "title": "论文精读：分布式卫星路由的持续深度强化学习",
+              "path": "星座路由/文献精读/2025-2-22论文精读.md",
+              "mtime": "2025-03-18T15:28:22.694980+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-2-26论文精读.md",
+              "title": "论文精读：低轨道卫星星座的节能分层协同学习",
+              "path": "星座路由/文献精读/2025-2-26论文精读.md",
+              "mtime": "2025-02-27T10:11:21.792786+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-2-27论文精读.md",
+              "title": "论文精读：分解与元-DRL 基于的 6G 卫星系统中异步联邦学习的多目标优化",
+              "path": "星座路由/文献精读/2025-2-27论文精读.md",
+              "mtime": "2025-02-28T11:00:33.194019+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-3-13论文精读：GENOME+.md",
+              "title": "2025-3-13论文精读",
+              "path": "星座路由/文献精读/2025-3-13论文精读：GENOME+.md",
+              "mtime": "2025-03-21T10:24:52.982276+08:00"
+            }
+          ]
+        },
+        {
+          "type": "directory",
+          "name": "论文调研",
+          "path": "星座路由/论文调研",
+          "count": 3,
+          "mtime": "2025-04-01T10:42:04.485182+08:00",
+          "children": [
+            {
+              "type": "file",
+              "name": "2025-2-10论文调研.md",
+              "title": "编码/模型压缩/动态模型/任务导向",
+              "path": "星座路由/论文调研/2025-2-10论文调研.md",
+              "mtime": "2025-02-19T14:47:13.219967+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-2-19论文调研.md",
+              "title": "论文调研：持续学习/压缩蒸馏在通信系统；任务自适应",
+              "path": "星座路由/论文调研/2025-2-19论文调研.md",
+              "mtime": "2025-02-22T09:36:19.078463+08:00"
+            },
+            {
+              "type": "file",
+              "name": "2025-3-25论文阅读：卫星路由.md",
+              "title": "2025-3-10论文阅读",
+              "path": "星座路由/论文调研/2025-3-25论文阅读：卫星路由.md",
+              "mtime": "2025-04-01T10:42:04.485182+08:00"
+            }
+          ]
+        },
         {
           "type": "file",
           "name": "2025-09-14-调研卫星链路恢复.md",
@@ -365,36 +411,6 @@
           "title": "马氏随机场-伊辛模型",
           "path": "系统性学习/11 概率图模型.md",
           "mtime": "2026-01-19T15:42:58.996872+08:00"
-        }
-      ]
-    },
-    {
-      "type": "directory",
-      "name": "论文调研",
-      "path": "论文调研",
-      "count": 3,
-      "mtime": "2025-04-01T10:42:04.485182+08:00",
-      "children": [
-        {
-          "type": "file",
-          "name": "2025-2-10论文调研.md",
-          "title": "编码/模型压缩/动态模型/任务导向",
-          "path": "论文调研/2025-2-10论文调研.md",
-          "mtime": "2025-02-19T14:47:13.219967+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-2-19论文调研.md",
-          "title": "论文调研：持续学习/压缩蒸馏在通信系统；任务自适应",
-          "path": "论文调研/2025-2-19论文调研.md",
-          "mtime": "2025-02-22T09:36:19.078463+08:00"
-        },
-        {
-          "type": "file",
-          "name": "2025-3-25论文阅读：卫星路由.md",
-          "title": "2025-3-10论文阅读",
-          "path": "论文调研/2025-3-25论文阅读：卫星路由.md",
-          "mtime": "2025-04-01T10:42:04.485182+08:00"
         }
       ]
     }

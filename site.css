@@ -849,23 +849,27 @@ details[open] > ul {
     width: 100%;
   }
 
-  .tree-label {
-    display: block;
-  }
-
   .tree-meta {
     display: none;
   }
 
   .tree-item {
+    display: inline-flex;
+    flex-wrap: nowrap;
     width: max-content;
-    max-width: 500px;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .tree-marker {
     flex-shrink: 0;
+  }
+
+  .tree-label {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .viewer-page {

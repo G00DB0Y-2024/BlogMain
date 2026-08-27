@@ -170,8 +170,10 @@
       for (let index = 0; index < blockMath.length; index += 1) {
         const token = `@@MATH_BLOCK_${index}@@`;
         const replacement = blockMath[index];
-        output = output.replace(new RegExp(`<p>\\s*${token}\\s*<\\/p>`, 'g'), replacement);
-        output = output.replace(new RegExp(token, 'g'), replacement);
+        const tokenEscaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        output = output
+          .replace(new RegExp(`<p>\\s*${tokenEscaped}\\s*<\\/p>`, 'g'), replacement)
+          .replace(new RegExp(tokenEscaped, 'g'), replacement);
       }
 
       output = output.replace(/<p>\s*<div class="math-display">([\s\S]*?)<\/div>\s*<\/p>/g, '<div class="math-display">$1</div>');
@@ -179,7 +181,8 @@
       for (let index = 0; index < inlineMath.length; index += 1) {
         const token = `@@MATH_INLINE_${index}@@`;
         const replacement = inlineMath[index];
-        output = output.replace(new RegExp(token, 'g'), replacement);
+        const tokenEscaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        output = output.replace(new RegExp(tokenEscaped, 'g'), replacement);
       }
 
       return output;
@@ -194,38 +197,30 @@
       return resolveMarkdownLink(markdownPath, clean);
     }
 
-    function setLinkedAnchors(root, markdownPath) {
-      root.querySelectorAll('a[href]').forEach((element) => {
-        const original = element.getAttribute('href') || '';
-        if (!original || isAnchoredOrExternal(original)) return;
-
-        if (original.toLowerCase().endsWith('.md')) {
-          const targetPath = resolveLinkHref(markdownPath, original);
-          element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
-          element.setAttribute('target', '_blank');
-          element.setAttribute('rel', 'noopener noreferrer');
-          return;
-        }
-
-        element.setAttribute('href', resolveAssetUrl(markdownPath, original));
-      });
-    }
-
-    function setLinkedAssets(root, markdownPath) {
-      const tags = [
-        ['img', 'src'],
-        ['source', 'src'],
-        ['video', 'src'],
-        ['audio', 'src'],
-      ];
-
-      for (const [tag, attr] of tags) {
-        root.querySelectorAll(`${tag}[${attr}]`).forEach((element) => {
-          const original = element.getAttribute(attr);
+    function processMediaLinks(root, markdownPath) {
+      const allElements = root.querySelectorAll('img[src], source[src], video[src], audio[src], a[href]');
+      allElements.forEach((element) => {
+        if (element.tagName === 'A') {
+          const original = element.getAttribute('href') || '';
           if (!original || isAnchoredOrExternal(original)) return;
-          element.setAttribute(attr, resolveAssetUrl(markdownPath, original));
-        });
-      }
+          if (original.toLowerCase().endsWith('.md')) {
+            const targetPath = resolveLinkHref(markdownPath, original);
+            element.setAttribute('href', `./viewer.html?file=${encodeURIComponent(targetPath)}`);
+            element.setAttribute('target', '_blank');
+            element.setAttribute('rel', 'noopener noreferrer');
+          } else {
+            element.setAttribute('href', resolveAssetUrl(markdownPath, original));
+          }
+        } else {
+          const original = element.getAttribute('src') || '';
+          if (!original || isAnchoredOrExternal(original)) return;
+          element.setAttribute('src', resolveAssetUrl(markdownPath, original));
+          if (element.tagName === 'IMG') {
+            element.setAttribute('loading', 'lazy');
+            element.setAttribute('decoding', 'async');
+          }
+        }
+      });
     }
 
     function slugify(text) {
@@ -254,8 +249,13 @@
         }));
     }
 
+    // Cache TOC headings once — avoid re-querying DOM on every scroll
+    let _cachedHeadings = null;
+    let _cachedTocLinks = null;
+
     function buildToc(root) {
       const headings = getTocHeadings(root);
+      _cachedHeadings = headings;
       const usedIds = new Map();
       const items = [];
 
@@ -287,6 +287,8 @@
             <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
+
+      _cachedTocLinks = Array.from(tocListEl.querySelectorAll('.toc-link'));
 
       if (window.MathJax?.typesetPromise) {
         window.MathJax.typesetPromise([tocListEl]).catch(() => {});
@@ -387,11 +389,9 @@
     }
 
     function updateActiveToc() {
-      const headings = getTocHeadings(writeEl).map((item) => item.heading);
-      const tocLinks = Array.from(tocListEl.querySelectorAll('.toc-link'));
-      if (!headings.length || !tocLinks.length) return;
+      if (!_cachedHeadings || !_cachedTocLinks) return;
 
-      const visibleHeadings = headings.filter((heading) => {
+      const visibleHeadings = _cachedHeadings.filter(({ heading }) => {
         const rect = heading.getBoundingClientRect();
         return rect.top < window.innerHeight && rect.bottom > 0;
       });
@@ -400,14 +400,14 @@
         return;
       }
 
-      const activeId = visibleHeadings[0].id;
+      const activeId = visibleHeadings[0].heading.id;
       if (activeId === activeTocId) {
         return;
       }
       activeTocId = activeId;
 
       let activeLink = null;
-      tocLinks.forEach((link) => {
+      _cachedTocLinks.forEach((link) => {
         const isActive = link.dataset.headingId === activeId;
         link.classList.toggle('is-active', isActive);
         if (isActive) activeLink = link;
@@ -427,8 +427,9 @@
     }
 
     function finalizeViewer(markdownPath) {
-      setLinkedAssets(writeEl, markdownPath);
-      setLinkedAnchors(writeEl, markdownPath);
+      _cachedHeadings = null;
+      _cachedTocLinks = null;
+      processMediaLinks(writeEl, markdownPath);
       enhanceCodeBlocks(writeEl);
       enhanceTables(writeEl);
       buildToc(writeEl);

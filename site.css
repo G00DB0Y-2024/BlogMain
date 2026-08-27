@@ -441,6 +441,7 @@ details[open] > ul {
 .viewer-shell {
   width: min(1080px, calc(100vw - 32px));
   margin: 24px auto 40px;
+  background: #f6f7fb;
 }
 
 .viewer-card {

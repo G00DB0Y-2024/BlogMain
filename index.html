@@ -129,14 +129,17 @@
       if (!rootLine) return;
       const toggleAll = (event) => {
         if (event.target.closest('a, button')) return;
-        const detailsList = treeEl.querySelectorAll('details');
-        const anyOpen = Array.from(detailsList).some((d) => d.hasAttribute('open'));
+        // Only target first-level directories (direct children of root tree)
+        const firstLevelDetails = treeEl.querySelectorAll('ul.file-tree.root-tree > li > details');
+        const anyOpen = Array.from(firstLevelDetails).some((d) => d.hasAttribute('open'));
         if (anyOpen) {
-          detailsList.forEach((details) => {
+          // Collapse all first-level directories
+          firstLevelDetails.forEach((details) => {
             details.removeAttribute('open');
           });
         } else {
-          detailsList.forEach((details) => {
+          // Expand all first-level directories (nested directories stay collapsed)
+          firstLevelDetails.forEach((details) => {
             details.setAttribute('open', '');
           });
         }

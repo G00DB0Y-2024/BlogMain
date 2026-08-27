@@ -830,11 +830,10 @@ details[open] > ul {
   }
 
   .tree-wrap {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    overscroll-behavior-x: contain;
   }
 
   .tree-wrap::-webkit-scrollbar {
@@ -842,7 +841,8 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: 500px;
+    min-width: unset;
+    width: 100%;
   }
 
   .tree-root-line {
@@ -855,10 +855,9 @@ details[open] > ul {
 
   .tree-item {
     display: inline-flex;
-    flex-wrap: nowrap;
-    width: max-content;
+    flex-wrap: wrap;
+    width: 100%;
     max-width: 100%;
-    overflow: hidden;
   }
 
   .tree-marker {

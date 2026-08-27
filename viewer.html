@@ -140,22 +140,12 @@
       };
 
       text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
-<<<<<<< HEAD
-        const cleaned = content.replace(/^\s*(?:>\s?)+/gm, '').trim();
-        const html = `<div class="math-display">${renderKatex(cleaned, true)}</div>`;
-=======
         const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
->>>>>>> parent of 833cf0c (修复latex和code渲染异常)
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
 
       text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
-<<<<<<< HEAD
-        const cleaned = content.replace(/^\s*(?:>\s?)+/gm, '').trim();
-        const html = `<div class="math-display">${renderKatex(cleaned, true)}</div>`;
-=======
         const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
->>>>>>> parent of 833cf0c (修复latex和code渲染异常)
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
 
@@ -182,14 +172,11 @@
         const replacement = blockMath[index];
         const tokenEscaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         output = output
-          .replace(new RegExp(`<blockquote>\\s*<p>\\s*${tokenEscaped}\\s*<\\/p>\\s*<\\/blockquote>`, 'g'), replacement)
           .replace(new RegExp(`<p>\\s*${tokenEscaped}\\s*<\\/p>`, 'g'), replacement)
           .replace(new RegExp(tokenEscaped, 'g'), replacement);
       }
 
-      output = output
-        .replace(/<blockquote>\s*<p>\s*<div class="math-display">([\s\S]*?)<\/div>\s*<\/p>\s*<\/blockquote>/g, '<div class="math-display">$1</div>')
-        .replace(/<p>\s*<div class="math-display">([\s\S]*?)<\/div>\s*<\/p>/g, '<div class="math-display">$1</div>');
+      output = output.replace(/<p>\s*<div class="math-display">([\s\S]*?)<\/div>\s*<\/p>/g, '<div class="math-display">$1</div>');
 
       for (let index = 0; index < inlineMath.length; index += 1) {
         const token = `@@MATH_INLINE_${index}@@`;

@@ -842,7 +842,7 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: 500px;
+    min-width: 0;
   }
 
   .tree-root-line {

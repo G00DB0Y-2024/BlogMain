@@ -830,19 +830,11 @@ details[open] > ul {
   }
 
   .tree-wrap {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    overscroll-behavior-x: contain;
-  }
-
-  .tree-wrap::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
   }
 
   .file-tree {
-    min-width: 500px;
+    min-width: 0;
   }
 
   .tree-root-line {

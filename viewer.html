@@ -97,7 +97,7 @@
         throwOnError: false,
         strict: 'ignore',
         trust: false,
-        output: 'htmlAndMathml',
+        output: 'html',
       });
     }
 
@@ -140,11 +140,13 @@
       };
 
       text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
+        if (/^\s*>/.test(content)) return _;
         const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
 
       text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
+        if (/^\s*>/.test(content)) return _;
         const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
@@ -299,6 +301,7 @@
       root.querySelectorAll('pre > code').forEach((code) => {
         const pre = code.parentElement;
         if (!pre || pre.dataset.enhanced === 'true') return;
+        if (pre.closest('blockquote')) return;
         pre.dataset.enhanced = 'true';
 
         const wrapper = document.createElement('div');

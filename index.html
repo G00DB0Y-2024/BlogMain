@@ -127,19 +127,26 @@
     function bindRootCollapse() {
       const rootLine = treeEl.querySelector('.tree-root-line');
       if (!rootLine) return;
-      const collapseAll = (event) => {
+      const toggleAll = (event) => {
         if (event.target.closest('a, button')) return;
-        const detailsList = treeEl.querySelectorAll('details[open]');
-        detailsList.forEach((details) => {
-          details.removeAttribute('open');
-        });
+        const detailsList = treeEl.querySelectorAll('details');
+        const anyOpen = Array.from(detailsList).some((d) => d.hasAttribute('open'));
+        if (anyOpen) {
+          detailsList.forEach((details) => {
+            details.removeAttribute('open');
+          });
+        } else {
+          detailsList.forEach((details) => {
+            details.setAttribute('open', '');
+          });
+        }
         requestAnimationFrame(syncRootLineWidthMobile);
       };
-      rootLine.addEventListener('click', collapseAll);
+      rootLine.addEventListener('click', toggleAll);
       rootLine.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          collapseAll(event);
+          toggleAll(event);
         }
       });
     }

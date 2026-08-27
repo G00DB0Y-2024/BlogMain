@@ -835,7 +835,7 @@ details[open] > ul {
   }
 
   .file-tree {
-    min-width: 0;
+    min-width: 500px;
   }
 
   body,

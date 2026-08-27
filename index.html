@@ -124,6 +124,26 @@
       window.addEventListener('resize', syncRootLineWidthMobile);
     }
 
+    function bindRootCollapse() {
+      const rootLine = treeEl.querySelector('.tree-root-line');
+      if (!rootLine) return;
+      const collapseAll = (event) => {
+        if (event.target.closest('a, button')) return;
+        const detailsList = treeEl.querySelectorAll('details[open]');
+        detailsList.forEach((details) => {
+          details.removeAttribute('open');
+        });
+        requestAnimationFrame(syncRootLineWidthMobile);
+      };
+      rootLine.addEventListener('click', collapseAll);
+      rootLine.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          collapseAll(event);
+        }
+      });
+    }
+
     async function init() {
       try {
         const response = await fetch('./manifest.json', { cache: 'no-cache' });
@@ -141,8 +161,9 @@
 
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
-        treeEl.innerHTML = `<div class="tree-root-line" aria-label="${rootName}"><span class="tree-root-title tree-label">${rootName}</span><span class="tree-meta root-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        treeEl.innerHTML = `<div class="tree-root-line" role="button" tabindex="0" aria-label="${rootName} - 点击收起全部"><span class="tree-root-title tree-label">${rootName}</span><span class="tree-meta root-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
         bindTreeResize();
+        bindRootCollapse();
       } catch (error) {
         treeEl.innerHTML = `<div class="tree-empty">无法读取目录索引：${escapeHtml(error.message)}</div>`;
       }

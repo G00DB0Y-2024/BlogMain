@@ -97,7 +97,7 @@
         throwOnError: false,
         strict: 'ignore',
         trust: false,
-        output: 'html',
+        output: 'htmlAndMathml',
       });
     }
 
@@ -140,14 +140,22 @@
       };
 
       text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, content) => {
+<<<<<<< HEAD
         const cleaned = content.replace(/^\s*(?:>\s?)+/gm, '').trim();
         const html = `<div class="math-display">${renderKatex(cleaned, true)}</div>`;
+=======
+        const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
+>>>>>>> parent of 833cf0c (修复latex和code渲染异常)
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
 
       text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, content) => {
+<<<<<<< HEAD
         const cleaned = content.replace(/^\s*(?:>\s?)+/gm, '').trim();
         const html = `<div class="math-display">${renderKatex(cleaned, true)}</div>`;
+=======
+        const html = `<div class="math-display">${renderKatex(content.trim(), true)}</div>`;
+>>>>>>> parent of 833cf0c (修复latex和code渲染异常)
         return `\n\n${makeBlockToken(html)}\n\n`;
       });
 
@@ -304,7 +312,6 @@
       root.querySelectorAll('pre > code').forEach((code) => {
         const pre = code.parentElement;
         if (!pre || pre.dataset.enhanced === 'true') return;
-        if (pre.closest('blockquote')) return;
         pre.dataset.enhanced = 'true';
 
         const wrapper = document.createElement('div');

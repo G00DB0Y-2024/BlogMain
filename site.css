@@ -27,10 +27,11 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  background: #ffffff;
 }
 
 body {
-  background: var(--bg-color);
+  background: #ffffff;
   color: var(--text-color);
   font-family: var(--font-sans);
   font-size: 15px;
@@ -292,12 +293,12 @@ textarea {
 }
 
 .tree-root-line:hover {
-  background: var(--border-light);
+  background: #e3eaf3;
   color: var(--heading-color);
 }
 
 .tree-root-line:active {
-  background: var(--border-color);
+  background: #d4dde8;
 }
 
 .tree-root-line:focus-visible {

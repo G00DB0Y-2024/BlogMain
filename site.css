@@ -854,21 +854,24 @@ details[open] > ul {
   }
 
   .tree-item {
-    display: inline-flex;
-    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     width: 100%;
     max-width: 100%;
   }
 
   .tree-marker {
     flex-shrink: 0;
+    width: 20px;
   }
 
   .tree-label {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .viewer-page {

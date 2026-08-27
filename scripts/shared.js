@@ -82,7 +82,7 @@ function resolveAssetUrl(markdownPath, reference) {
   }
 
   const mdDir = dirname(markdownPath);
-  const target = joinPath(mdDir, cleanPath);
+  const target = joinPath(mdDir, safeDecodeURIComponent(cleanPath));
   return new URL(encodePathSegments(target), siteBaseUrl()).toString();
 }
 
@@ -94,7 +94,7 @@ function resolveMarkdownLink(markdownPath, reference) {
 
   const cleanPath = original.split('#')[0].split('?')[0];
   const mdDir = dirname(markdownPath);
-  const target = joinPath(mdDir, cleanPath);
+  const target = joinPath(mdDir, safeDecodeURIComponent(cleanPath));
   return stripLeadingSlashes(normalizeSlashes(target));
 }
 

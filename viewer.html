@@ -385,9 +385,11 @@
       const linkRect = activeLink.getBoundingClientRect();
       const currentScroll = tocPanelEl.scrollTop;
       const relativeTop = linkRect.top - panelRect.top + currentScroll;
-      const maxScroll = tocPanelEl.scrollHeight - tocPanelEl.clientHeight;
-      const topPadding = 20;
-      tocPanelEl.scrollTo({ top: Math.min(Math.max(relativeTop - topPadding, 0), maxScroll), behavior: 'smooth' });
+      const maxScroll = Math.max(0, tocPanelEl.scrollHeight - tocPanelEl.clientHeight);
+      const targetViewportOffset = (panelRect.height - linkRect.height) / 2 - 8;
+      const desired = Math.max(0, relativeTop - targetViewportOffset);
+      const clamped = Math.min(desired, maxScroll);
+      tocPanelEl.scrollTo({ top: clamped, behavior: 'smooth' });
     }
 
     function updateActiveToc() {

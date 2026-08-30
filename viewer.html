@@ -36,10 +36,6 @@
           </div>
           <nav class="toc-list" id="toc-list"></nav>
         </aside>
-
-        <div class="toc-drawer" id="toc-drawer" aria-hidden="true">
-          <div class="toc-scrim" id="toc-scrim" aria-hidden="true"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -581,9 +577,6 @@
         tocSyncMode = 'scroll';
         scheduleActiveTocUpdate();
       }, 900);
-      if (document.body.classList.contains('toc-open')) {
-        window.setTimeout(closeMobileToc, 250);
-      }
     });
 
     let copyFeedbackTimer = 0;
@@ -612,84 +605,6 @@
         copyViewerLink();
       }
     });
-
-    function initMobileToc() {
-      const mq = window.matchMedia('(max-width: 640px)');
-      const isMobile = () => mq.matches;
-      const drawer = document.getElementById('toc-drawer');
-      const scrim = document.getElementById('toc-scrim');
-      const panel = document.getElementById('toc-panel');
-      const main = document.querySelector('main.viewer-content');
-      if (!drawer || !scrim || !panel || !main) return;
-
-      const setAria = (open) => {
-        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
-        scrim.setAttribute('aria-hidden', open ? 'false' : 'true');
-      };
-
-      window.openMobileToc = () => {
-        if (!isMobile()) return;
-        document.body.classList.add('toc-open');
-        setAria(true);
-      };
-      window.closeMobileToc = () => {
-        if (!document.body.classList.contains('toc-open')) return;
-        document.body.classList.remove('toc-open');
-        setAria(false);
-      };
-      const open = window.openMobileToc;
-      const close = window.closeMobileToc;
-
-      let startX = 0, startY = 0, tracking = false;
-      main.addEventListener('touchstart', (e) => {
-        if (e.touches.length !== 1) return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        tracking = true;
-      }, { passive: true });
-
-      main.addEventListener('touchend', (e) => {
-        if (!tracking) return;
-        tracking = false;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - startX;
-        const dy = t.clientY - startY;
-        if (Math.abs(dy) < 40 && dx >= 60 && !document.body.classList.contains('toc-open')) {
-          open();
-        }
-      }, { passive: true });
-
-      let pStartX = 0, pStartY = 0, pTrack = false;
-      panel.addEventListener('touchstart', (e) => {
-        if (!document.body.classList.contains('toc-open')) return;
-        if (e.touches.length !== 1) return;
-        pStartX = e.touches[0].clientX;
-        pStartY = e.touches[0].clientY;
-        pTrack = true;
-      }, { passive: true });
-      panel.addEventListener('touchend', (e) => {
-        if (!pTrack) return;
-        pTrack = false;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - pStartX;
-        const dy = t.clientY - pStartY;
-        if (Math.abs(dy) < 40 && dx <= -60) close();
-      }, { passive: true });
-
-      scrim.addEventListener('click', close);
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close();
-      });
-
-      const onMqChange = () => close();
-      if (mq.addEventListener) {
-        mq.addEventListener('change', onMqChange);
-      } else if (mq.addListener) {
-        mq.addListener(onMqChange);
-      }
-    }
-
-    initMobileToc();
 
     render();
   </script>

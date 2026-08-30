@@ -771,7 +771,7 @@ ul.file-tree.is-tree-transitioning {
 .toc-number {
   flex: 0 0 auto;
   color: var(--meta-color);
-  font-size: 0.78rem;
+  font-size: 0.94rem;
   font-variant-numeric: tabular-nums;
   line-height: inherit;
   white-space: nowrap;

@@ -275,9 +275,13 @@
     }
 
     function getTocHeadings(root) {
+      const minLevel = 2;
       const maxLevel = 5;
       const allHeadings = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6'))
-        .filter((heading) => Number(heading.tagName.slice(1)) <= maxLevel);
+        .filter((heading) => {
+          const level = Number(heading.tagName.slice(1));
+          return level >= minLevel && level <= maxLevel;
+        });
       const existingLevels = [...new Set(allHeadings.map((heading) => Number(heading.tagName.slice(1))))]
         .sort((a, b) => a - b)
         .slice(0, maxLevel);

@@ -141,8 +141,10 @@
 
       if (shouldOpen) {
         details.open = true;
-        children.style.height = `${children.getBoundingClientRect().height}px`;
+        children.style.height = '0px';
         children.style.opacity = '0';
+        // Commit the collapsed start state before transitioning to content height.
+        void children.offsetHeight;
         requestAnimationFrame(() => {
           children.style.height = `${children.scrollHeight}px`;
           children.style.opacity = '1';

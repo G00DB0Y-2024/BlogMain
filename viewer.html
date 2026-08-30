@@ -324,7 +324,7 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, rank, number, html: heading.innerHTML, id });
+        items.push({ level, rank, number, text, id });
       });
 
       if (!items.length) {
@@ -338,7 +338,7 @@
         return `
           <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${item.rank}">
             <span class="toc-number" aria-hidden="true">${item.number}</span>
-            <span class="toc-text">${item.html}</span>
+            <span class="toc-text">${escapeHtml(item.text)}</span>
           </a>`;
       }).join('');
 

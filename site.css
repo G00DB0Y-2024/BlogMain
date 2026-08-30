@@ -771,6 +771,14 @@ ul.file-tree.is-tree-transitioning {
   box-shadow: inset 2px 0 0 var(--link-color);
 }
 
+.toc-link .toc-text {
+  font-weight: normal;
+}
+
+.toc-link.is-active .toc-text {
+  font-weight: 600;
+}
+
 .toc-marker {
   display: none;
 }

@@ -282,18 +282,21 @@
           const level = Number(heading.tagName.slice(1));
           return level >= minLevel && level <= maxLevel;
         });
-      const existingLevels = [...new Set(allHeadings.map((heading) => Number(heading.tagName.slice(1))))]
-        .sort((a, b) => a - b)
-        .slice(0, maxLevel);
-      const levelRank = new Map(existingLevels.map((level, index) => [level, index]));
 
-      return allHeadings
-        .filter((heading) => levelRank.has(Number(heading.tagName.slice(1))))
-        .map((heading) => ({
+      // Number by contiguous TOC depth, even when Markdown skips heading levels.
+      let previousTocLevel = minLevel - 1;
+      return allHeadings.map((heading) => {
+        const level = Number(heading.tagName.slice(1));
+        const tocLevel = level > previousTocLevel + 1
+          ? Math.min(previousTocLevel + 1, maxLevel)
+          : level;
+        previousTocLevel = tocLevel;
+        return {
           heading,
-          level: Number(heading.tagName.slice(1)),
-          rank: levelRank.get(Number(heading.tagName.slice(1))) ?? 0,
-        }));
+          level,
+          rank: tocLevel - minLevel,
+        };
+      });
     }
 
     // Cache TOC headings once — avoid re-querying DOM on every scroll

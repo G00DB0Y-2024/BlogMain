@@ -668,6 +668,13 @@ ul.file-tree.is-tree-transitioning {
   flex: 0 1 auto;
 }
 
+/* Standalone HTML images that markdown-it placed directly under #write */
+#write > img:only-child {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ===== Viewer Error ===== */
 .viewer-error {
   padding: 22px;

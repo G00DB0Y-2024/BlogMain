@@ -1,0 +1,1 @@
+python D:\MyMedia\@Caches\TyporaDocs\BlogMain\build_manifest.py

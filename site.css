@@ -416,8 +416,14 @@ details[open] > summary .tree-marker {
 }
 
 details[open] > ul {
-  animation: slideDownFade 0.24s ease-out forwards;
   transform-origin: top;
+}
+
+ul.file-tree.is-tree-transitioning {
+  display: block;
+  margin: 0;
+  transition: height 240ms ease, opacity 180ms ease;
+  will-change: height, opacity;
 }
 
 @keyframes slideDownFade {
@@ -653,6 +659,15 @@ details[open] > ul {
   height: auto !important;
 }
 
+#write p.html-image-only {
+  display: flex;
+  justify-content: center;
+}
+
+#write p.html-image-only > img {
+  flex: 0 1 auto;
+}
+
 /* ===== Viewer Error ===== */
 .viewer-error {
   padding: 22px;
@@ -751,6 +766,15 @@ details[open] > ul {
 
 .toc-marker {
   display: none;
+}
+
+.toc-number {
+  flex: 0 0 auto;
+  color: var(--meta-color);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  line-height: inherit;
+  white-space: nowrap;
 }
 
 .toc-text {

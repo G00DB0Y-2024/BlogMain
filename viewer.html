@@ -127,7 +127,7 @@
 
     function extractMath(source) {
       const protectedCode = protectCode(source);
-      let text = protectedCode.text;
+      let text = markHtmlImages(protectedCode.text);
       const inlineMath = [];
       const blockMath = [];
 
@@ -218,6 +218,26 @@
       return resolveMarkdownLink(markdownPath, clean);
     }
 
+    function centerStandaloneHtmlImages(root) {
+      root.querySelectorAll('img[data-html-image]').forEach((image) => {
+        const parent = image.parentElement;
+        if (!parent || parent.tagName !== 'P') return;
+        const significantNodes = Array.from(parent.childNodes).filter((node) => {
+          return node.nodeType !== Node.TEXT_NODE || node.textContent.trim();
+        });
+        if (significantNodes.length === 1 && significantNodes[0] === image) {
+          parent.classList.add('html-image-only');
+        }
+      });
+    }
+
+    function markHtmlImages(source) {
+      return String(source).replace(/<img\b([^>]*?)>/gi, (match, attributes) => {
+        if (/\bdata-html-image\b/i.test(attributes)) return match;
+        return `<img data-html-image${attributes}>`;
+      });
+    }
+
     function processMediaLinks(root, markdownPath) {
       const allElements = root.querySelectorAll('img[src], source[src], video[src], audio[src], a[href]');
       allElements.forEach((element) => {
@@ -281,10 +301,15 @@
       _cachedHeadings = headings;
       const usedIds = new Map();
       const items = [];
+      const counters = [];
 
       headings.forEach(({ heading, level, rank }) => {
         const text = heading.textContent.trim();
         if (!text) return;
+
+        counters[rank] = (counters[rank] || 0) + 1;
+        counters.length = rank + 1;
+        const number = counters.join('.');
 
         let id = heading.id || slugify(text) || `heading-${items.length + 1}`;
         const count = usedIds.get(id) || 0;
@@ -294,7 +319,7 @@
         usedIds.set(id, count + 1);
         heading.id = id;
 
-        items.push({ level, rank, html: heading.innerHTML, id });
+        items.push({ level, rank, number, html: heading.innerHTML, id });
       });
 
       if (!items.length) {
@@ -307,6 +332,7 @@
       tocListEl.innerHTML = items.map((item) => {
         return `
           <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${item.rank}">
+            <span class="toc-number" aria-hidden="true">${item.number}</span>
             <span class="toc-text">${item.html}</span>
           </a>`;
       }).join('');
@@ -455,6 +481,7 @@
       _cachedHeadings = null;
       _cachedTocLinks = null;
       processMediaLinks(writeEl, markdownPath);
+      centerStandaloneHtmlImages(writeEl);
       enhanceCodeBlocks(writeEl);
       enhanceTables(writeEl);
       buildToc(writeEl);

@@ -117,6 +117,74 @@
       rootLine.style.minWidth = `${w}px`;
     }
 
+    function getDirectoryChildren(details) {
+      return details.querySelector(':scope > ul.file-tree');
+    }
+
+    function stopTreeTransition(children) {
+      if (children._treeTransitionCleanup) {
+        children._treeTransitionCleanup();
+      }
+    }
+
+    function animateDirectory(details, shouldOpen) {
+      const children = getDirectoryChildren(details);
+      const targetOpen = details.dataset.treeTargetOpen === undefined
+        ? details.open
+        : details.dataset.treeTargetOpen === 'true';
+      if (!children || targetOpen === shouldOpen) return;
+
+      stopTreeTransition(children);
+      details.dataset.treeTargetOpen = String(shouldOpen);
+      children.classList.add('is-tree-transitioning');
+      children.style.overflow = 'hidden';
+
+      if (shouldOpen) {
+        details.open = true;
+        children.style.height = `${children.getBoundingClientRect().height}px`;
+        children.style.opacity = '0';
+        requestAnimationFrame(() => {
+          children.style.height = `${children.scrollHeight}px`;
+          children.style.opacity = '1';
+        });
+      } else {
+        children.style.height = `${children.getBoundingClientRect().height}px`;
+        children.style.opacity = '1';
+        requestAnimationFrame(() => {
+          children.style.height = '0px';
+          children.style.opacity = '0';
+        });
+      }
+
+      const finish = (event) => {
+        if (event && (event.target !== children || event.propertyName !== 'height')) return;
+        children.removeEventListener('transitionend', finish);
+        children._treeTransitionCleanup = null;
+        if (!shouldOpen) details.open = false;
+        delete details.dataset.treeTargetOpen;
+        children.classList.remove('is-tree-transitioning');
+        children.style.height = '';
+        children.style.opacity = '';
+        children.style.overflow = '';
+        requestAnimationFrame(syncRootLineWidthMobile);
+      };
+      children._treeTransitionCleanup = () => {
+        children.removeEventListener('transitionend', finish);
+        children._treeTransitionCleanup = null;
+      };
+      children.addEventListener('transitionend', finish);
+    }
+
+    function bindTreeTransitions() {
+      treeEl.addEventListener('click', (event) => {
+        const summary = event.target.closest('summary');
+        if (!summary || !treeEl.contains(summary)) return;
+        event.preventDefault();
+        const details = summary.parentElement;
+        animateDirectory(details, !details.open);
+      });
+    }
+
     function bindTreeResize() {
       treeEl.addEventListener('toggle', () => {
         requestAnimationFrame(syncRootLineWidthMobile);
@@ -133,14 +201,14 @@
         const firstLevelDetails = treeEl.querySelectorAll('ul.file-tree.root-tree > li > details');
         const anyOpen = Array.from(firstLevelDetails).some((d) => d.hasAttribute('open'));
         if (anyOpen) {
-          // Collapse all first-level directories
+          // Collapse all first-level directories.
           firstLevelDetails.forEach((details) => {
-            details.removeAttribute('open');
+            animateDirectory(details, false);
           });
         } else {
-          // Expand all first-level directories (nested directories stay collapsed)
+          // Expand all first-level directories (nested directories stay collapsed).
           firstLevelDetails.forEach((details) => {
-            details.setAttribute('open', '');
+            animateDirectory(details, true);
           });
         }
         requestAnimationFrame(syncRootLineWidthMobile);
@@ -172,6 +240,7 @@
         const rootName = escapeHtml(manifest.rootName || 'notes');
         const rootCount = escapeHtml(`${manifest.totalPosts ?? 0} notes`);
         treeEl.innerHTML = `<div class="tree-root-line" role="button" tabindex="0" aria-label="${rootName} - 点击收起全部"><span class="tree-root-title tree-label">${rootName}</span><span class="tree-meta root-meta">${rootCount}</span></div>${renderNodes(Array.isArray(manifest.tree) ? manifest.tree : [])}`;
+        bindTreeTransitions();
         bindTreeResize();
         bindRootCollapse();
       } catch (error) {

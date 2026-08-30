@@ -614,7 +614,7 @@ img {
 }
 
 /* Standalone HTML images that markdown-it places directly under #write */
-#write > img:only-child {
+#write > img {
     display: block;
     margin-left: auto;
     margin-right: auto;

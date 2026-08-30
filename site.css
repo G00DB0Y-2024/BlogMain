@@ -669,7 +669,7 @@ ul.file-tree.is-tree-transitioning {
 }
 
 /* Standalone HTML images that markdown-it placed directly under #write */
-#write > img:only-child {
+#write > img {
   display: block;
   margin-left: auto;
   margin-right: auto;

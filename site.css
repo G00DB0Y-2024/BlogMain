@@ -659,12 +659,12 @@ ul.file-tree.is-tree-transitioning {
   height: auto !important;
 }
 
-#write p.html-image-only {
+#write p.image-only {
   display: flex;
   justify-content: center;
 }
 
-#write p.html-image-only > img {
+#write p.image-only > img {
   flex: 0 1 auto;
 }
 

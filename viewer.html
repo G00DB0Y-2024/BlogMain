@@ -219,14 +219,12 @@
     }
 
     function centerStandaloneHtmlImages(root) {
-      root.querySelectorAll('img[data-html-image]').forEach((image) => {
-        const parent = image.parentElement;
-        if (!parent || parent.tagName !== 'P') return;
+      root.querySelectorAll('p').forEach((parent) => {
         const significantNodes = Array.from(parent.childNodes).filter((node) => {
           return node.nodeType !== Node.TEXT_NODE || node.textContent.trim();
         });
-        if (significantNodes.length === 1 && significantNodes[0] === image) {
-          parent.classList.add('html-image-only');
+        if (significantNodes.length === 1 && significantNodes[0].nodeName === 'IMG') {
+          parent.classList.add('image-only');
         }
       });
     }

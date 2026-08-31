@@ -986,10 +986,14 @@ ul.file-tree.is-tree-transitioning {
   z-index: 50;
   pointer-events: none;
   visibility: hidden;
+  /* 让 visibility 在过渡结束后再切换，这样关闭时面板/背景的 transition 才能播完 */
+  transition: visibility 0s linear 280ms;
 }
 .toc-drawer.is-open {
   pointer-events: auto;
   visibility: visible;
+  /* 打开时立即切换 visibility，让 transition 立即播放 */
+  transition: visibility 0s linear 0s;
 }
 .toc-drawer-backdrop {
   position: absolute;

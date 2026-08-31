@@ -450,9 +450,28 @@
       }
     }
 
+    function isPageAtBottom() {
+      return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    }
+
     function forceTocTopAtPageStart() {
-      if (window.scrollY <= 2 && tocPanelEl.scrollTop !== 0) {
-        tocPanelEl.scrollTop = 0;
+      if (window.scrollY <= 2) {
+        if (tocPanelEl.scrollTop !== 0) tocPanelEl.scrollTop = 0;
+        if (drawerPanelEl && drawerPanelEl.scrollTop !== 0) drawerPanelEl.scrollTop = 0;
+      }
+    }
+
+    function forceTocBottomAtPageEnd() {
+      if (!isPageAtBottom()) return;
+      const maxDesktop = Math.max(0, tocPanelEl.scrollHeight - tocPanelEl.clientHeight);
+      if (Math.abs(tocPanelEl.scrollTop - maxDesktop) > 1) {
+        tocPanelEl.scrollTop = maxDesktop;
+      }
+      if (drawerPanelEl) {
+        const maxDrawer = Math.max(0, drawerPanelEl.scrollHeight - drawerPanelEl.clientHeight);
+        if (Math.abs(drawerPanelEl.scrollTop - maxDrawer) > 1) {
+          drawerPanelEl.scrollTop = maxDrawer;
+        }
       }
     }
 
@@ -472,6 +491,10 @@
     function updateActiveToc() {
       if (!_cachedHeadings || !_cachedTocLinks) return;
 
+      // 边界条件：页面最顶端/最底端时，TOC 也分别回到最顶端/最底端
+      forceTocTopAtPageStart();
+      forceTocBottomAtPageEnd();
+
       const visibleHeadings = _cachedHeadings.filter(({ heading }) => {
         const rect = heading.getBoundingClientRect();
         return rect.top < window.innerHeight && rect.bottom > 0;
@@ -487,15 +510,26 @@
       }
       activeTocId = activeId;
 
-      let activeLink = null;
+      let activeDesktopLink = null;
+      let activeDrawerLink = null;
       _cachedTocLinks.forEach((link) => {
         const isActive = link.dataset.headingId === activeId;
         link.classList.toggle('is-active', isActive);
-        if (isActive) activeLink = link;
+        if (isActive) {
+          if (tocListEl.contains(link)) {
+            activeDesktopLink = link;
+          } else if (drawerListEl.contains(link)) {
+            activeDrawerLink = link;
+          }
+        }
       });
-      forceTocTopAtPageStart();
-      if (window.scrollY > 2 && tocSyncMode === 'scroll') {
-        scrollActiveTocIntoView(activeLink);
+
+      const atTop = window.scrollY <= 2;
+      const atBottom = isPageAtBottom();
+      // 在边界位置已经处理过 TOC 滚动了，不再做跟随滚动
+      if (!atTop && !atBottom && tocSyncMode === 'scroll') {
+        if (activeDesktopLink) scrollActiveTocIntoView(activeDesktopLink);
+        if (activeDrawerLink) scrollActiveTocIntoDrawerView(activeDrawerLink);
       }
     }
 

@@ -40,6 +40,17 @@
     </div>
   </div>
 
+  <div class="toc-drawer" id="toc-drawer" aria-hidden="true">
+    <div class="toc-drawer-backdrop" id="toc-drawer-backdrop"></div>
+    <aside class="toc-drawer-panel panel" aria-label="文章目录">
+      <div class="toc-header">
+        <h2 class="section-title">TOC</h2>
+        <button type="button" class="toc-drawer-close" id="toc-drawer-close" aria-label="关闭目录">×</button>
+      </div>
+      <nav class="toc-list" id="toc-drawer-list"></nav>
+    </aside>
+  </div>
+
   <script type="module">
     import {
       basename,
@@ -58,6 +69,12 @@
     const titleEl = document.querySelector('#viewer-title');
     const tocPanelEl = document.querySelector('#toc-panel');
     const tocListEl = document.querySelector('#toc-list');
+    const drawerEl = document.querySelector('#toc-drawer');
+    const drawerBackdropEl = document.querySelector('#toc-drawer-backdrop');
+    const drawerListEl = document.querySelector('#toc-drawer-list');
+    const drawerPanelEl = document.querySelector('.toc-drawer-panel');
+    const drawerCloseBtn = document.querySelector('#toc-drawer-close');
+    let drawerOpen = false;
     const markdownUrl = new URL(window.location.href).searchParams.get('file');
     const copyFeedbackEl = document.querySelector('#copy-feedback');
 
@@ -328,24 +345,32 @@
       });
 
       if (!items.length) {
-        tocListEl.innerHTML = '<div class="toc-empty">当前文章没有标题</div>';
+        const emptyHtml = '<div class="toc-empty">当前文章没有标题</div>';
+        tocListEl.innerHTML = emptyHtml;
+        drawerListEl.innerHTML = emptyHtml;
         tocPanelEl.classList.add('is-empty');
+        _cachedTocLinks = [];
         return;
       }
 
       tocPanelEl.classList.remove('is-empty');
-      tocListEl.innerHTML = items.map((item) => {
+      const listHtml = items.map((item) => {
         return `
           <a class="toc-link level-${item.level}" data-heading-id="${item.id}" href="#${encodeURIComponent(item.id)}" style="--toc-indent:${item.rank}">
             <span class="toc-number" aria-hidden="true">${item.number}</span>
             <span class="toc-text">${escapeHtml(item.text)}</span>
           </a>`;
       }).join('');
+      tocListEl.innerHTML = listHtml;
+      drawerListEl.innerHTML = listHtml;
 
-      _cachedTocLinks = Array.from(tocListEl.querySelectorAll('.toc-link'));
+      _cachedTocLinks = [
+        ...Array.from(tocListEl.querySelectorAll('.toc-link')),
+        ...Array.from(drawerListEl.querySelectorAll('.toc-link')),
+      ];
 
       if (window.MathJax?.typesetPromise) {
-        window.MathJax.typesetPromise([tocListEl]).catch(() => {});
+        window.MathJax.typesetPromise([tocListEl, drawerListEl]).catch(() => {});
       }
     }
 
@@ -579,6 +604,39 @@
       }, 900);
     });
 
+    function scrollActiveTocIntoDrawerView(activeLink) {
+      if (!activeLink || !drawerPanelEl) return;
+      const panelRect = drawerPanelEl.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      const currentScroll = drawerPanelEl.scrollTop;
+      const relativeTop = linkRect.top - panelRect.top + currentScroll;
+      const maxScroll = Math.max(0, drawerPanelEl.scrollHeight - drawerPanelEl.clientHeight);
+      const targetViewportOffset = (panelRect.height - linkRect.height) / 2 - 8;
+      const desired = Math.max(0, relativeTop - targetViewportOffset);
+      const clamped = Math.min(desired, maxScroll);
+      drawerPanelEl.scrollTo({ top: clamped, behavior: 'smooth' });
+    }
+
+    drawerListEl.addEventListener('click', (event) => {
+      const link = event.target.closest('.toc-link');
+      if (!link || !drawerListEl.contains(link)) return;
+      const targetId = link.dataset.headingId;
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (!target) return;
+      event.preventDefault();
+      event.stopPropagation();
+      window.history.pushState(null, '', `#${encodeURIComponent(targetId)}`);
+      tocSyncMode = 'click';
+      window.clearTimeout(tocSyncModeTimer);
+      scrollToHeading(target);
+      scrollActiveTocIntoDrawerView(link);
+      tocSyncModeTimer = window.setTimeout(() => {
+        tocSyncMode = 'scroll';
+        scheduleActiveTocUpdate();
+      }, 900);
+      closeDrawer();
+    });
+
     let copyFeedbackTimer = 0;
 
     async function copyViewerLink() {
@@ -605,6 +663,89 @@
         copyViewerLink();
       }
     });
+
+    function openDrawer() {
+      if (drawerOpen) return;
+      drawerOpen = true;
+      drawerEl.classList.add('is-open');
+      drawerEl.setAttribute('aria-hidden', 'false');
+      scheduleActiveTocUpdate();
+    }
+
+    function closeDrawer() {
+      if (!drawerOpen) return;
+      drawerOpen = false;
+      drawerEl.classList.remove('is-open');
+      drawerEl.setAttribute('aria-hidden', 'true');
+    }
+
+    if (drawerBackdropEl) {
+      drawerBackdropEl.addEventListener('click', closeDrawer);
+    }
+    if (drawerCloseBtn) {
+      drawerCloseBtn.addEventListener('click', closeDrawer);
+    }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && drawerOpen) {
+        event.preventDefault();
+        closeDrawer();
+      }
+    });
+
+    const SWIPE_EDGE_PX = 24;
+    const SWIPE_DISTANCE_PX = 56;
+    let touchOrigin = null;
+
+    window.addEventListener('touchstart', (event) => {
+      if (event.touches.length !== 1) return;
+      const t = event.touches[0];
+      touchOrigin = { x: t.clientX, y: t.clientY };
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (event) => {
+      if (!touchOrigin || event.touches.length !== 1) return;
+      const t = event.touches[0];
+      const dx = t.clientX - touchOrigin.x;
+      const dy = t.clientY - touchOrigin.y;
+      if (drawerOpen) {
+        const panelWidth = drawerPanelEl ? drawerPanelEl.offsetWidth : 0;
+        if (touchOrigin.x > panelWidth && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          if (typeof event.cancelable === 'boolean' && !event.cancelable) return;
+          event.preventDefault();
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', (event) => {
+      if (!touchOrigin) {
+        touchOrigin = null;
+        return;
+      }
+      const t = event.changedTouches[0];
+      if (!t) {
+        touchOrigin = null;
+        return;
+      }
+      const dx = t.clientX - touchOrigin.x;
+      const dy = t.clientY - touchOrigin.y;
+      const startX = touchOrigin.x;
+
+      if (!drawerOpen) {
+        if (startX <= SWIPE_EDGE_PX && dx > SWIPE_DISTANCE_PX && dx > Math.abs(dy) * 1.5) {
+          openDrawer();
+        }
+      } else {
+        const panelWidth = drawerPanelEl ? drawerPanelEl.offsetWidth : 0;
+        if (startX > panelWidth && dx < -SWIPE_DISTANCE_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          closeDrawer();
+        }
+      }
+      touchOrigin = null;
+    }, { passive: true });
+
+    window.addEventListener('touchcancel', () => {
+      touchOrigin = null;
+    }, { passive: true });
 
     render();
   </script>

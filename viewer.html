@@ -457,7 +457,7 @@
     function forceTocTopAtPageStart() {
       if (window.scrollY <= 2) {
         if (tocPanelEl.scrollTop !== 0) tocPanelEl.scrollTop = 0;
-        if (drawerPanelEl && drawerPanelEl.scrollTop !== 0) drawerPanelEl.scrollTop = 0;
+        if (drawerListEl && drawerListEl.scrollTop !== 0) drawerListEl.scrollTop = 0;
       }
     }
 
@@ -467,10 +467,10 @@
       if (Math.abs(tocPanelEl.scrollTop - maxDesktop) > 1) {
         tocPanelEl.scrollTop = maxDesktop;
       }
-      if (drawerPanelEl) {
-        const maxDrawer = Math.max(0, drawerPanelEl.scrollHeight - drawerPanelEl.clientHeight);
-        if (Math.abs(drawerPanelEl.scrollTop - maxDrawer) > 1) {
-          drawerPanelEl.scrollTop = maxDrawer;
+      if (drawerListEl) {
+        const maxDrawer = Math.max(0, drawerListEl.scrollHeight - drawerListEl.clientHeight);
+        if (Math.abs(drawerListEl.scrollTop - maxDrawer) > 1) {
+          drawerListEl.scrollTop = maxDrawer;
         }
       }
     }
@@ -639,16 +639,16 @@
     });
 
     function scrollActiveTocIntoDrawerView(activeLink) {
-      if (!activeLink || !drawerPanelEl) return;
-      const panelRect = drawerPanelEl.getBoundingClientRect();
+      if (!activeLink || !drawerListEl) return;
+      const panelRect = drawerListEl.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
-      const currentScroll = drawerPanelEl.scrollTop;
+      const currentScroll = drawerListEl.scrollTop;
       const relativeTop = linkRect.top - panelRect.top + currentScroll;
-      const maxScroll = Math.max(0, drawerPanelEl.scrollHeight - drawerPanelEl.clientHeight);
+      const maxScroll = Math.max(0, drawerListEl.scrollHeight - drawerListEl.clientHeight);
       const targetViewportOffset = (panelRect.height - linkRect.height) / 2 - 8;
       const desired = Math.max(0, relativeTop - targetViewportOffset);
       const clamped = Math.min(desired, maxScroll);
-      drawerPanelEl.scrollTo({ top: clamped, behavior: 'smooth' });
+      drawerListEl.scrollTo({ top: clamped, behavior: 'smooth' });
     }
 
     drawerListEl.addEventListener('click', (event) => {

@@ -713,6 +713,10 @@
           if (typeof event.cancelable === 'boolean' && !event.cancelable) return;
           event.preventDefault();
         }
+      } else if (dx > 12 && dx > Math.abs(dy) * 1.5) {
+        // 抽屉关闭时，检测到明确的右滑意图就阻止默认行为（防止浏览器页面返回手势等）
+        if (typeof event.cancelable === 'boolean' && !event.cancelable) return;
+        event.preventDefault();
       }
     }, { passive: false });
 
@@ -728,15 +732,15 @@
       }
       const dx = t.clientX - touchOrigin.x;
       const dy = t.clientY - touchOrigin.y;
-      const startX = touchOrigin.x;
 
       if (!drawerOpen) {
-        if (startX <= SWIPE_EDGE_PX && dx > SWIPE_DISTANCE_PX && dx > Math.abs(dy) * 1.5) {
+        // 关闭抽屉时，屏幕任意位置右滑都可以打开 TOC
+        if (dx > SWIPE_DISTANCE_PX && dx > Math.abs(dy) * 1.5) {
           openDrawer();
         }
       } else {
         const panelWidth = drawerPanelEl ? drawerPanelEl.offsetWidth : 0;
-        if (startX > panelWidth && dx < -SWIPE_DISTANCE_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (touchOrigin.x > panelWidth && dx < -SWIPE_DISTANCE_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {
           closeDrawer();
         }
       }

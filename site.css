@@ -986,6 +986,7 @@ ul.file-tree.is-tree-transitioning {
   z-index: 50;
   pointer-events: none;
   visibility: hidden;
+  touch-action: none;
 }
 .toc-drawer.is-open {
   pointer-events: auto;
@@ -997,7 +998,6 @@ ul.file-tree.is-tree-transitioning {
   background: rgba(0, 0, 0, 0.25);
   opacity: 0;
   transition: opacity 280ms ease;
-  touch-action: pan-y;
 }
 .toc-drawer.is-open .toc-drawer-backdrop {
   opacity: 1;
@@ -1051,8 +1051,47 @@ ul.file-tree.is-tree-transitioning {
   background: var(--accent-soft);
 }
 
+/* ===== Drawer Toggle Button (mobile FAB) ===== */
+.toc-drawer-toggle {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-color);
+  color: var(--text-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 160ms ease, background-color 160ms ease;
+  touch-action: manipulation;
+}
+.toc-drawer-toggle:hover {
+  background: var(--accent-soft);
+}
+.toc-drawer-toggle:active {
+  transform: scale(0.94);
+}
+.toc-drawer-toggle svg {
+  display: block;
+}
+.toc-drawer.is-open + .toc-drawer-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+}
+
 @media (min-width: 641px) {
   .toc-drawer {
+    display: none;
+  }
+  .toc-drawer-toggle {
     display: none;
   }
 }

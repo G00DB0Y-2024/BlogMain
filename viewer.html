@@ -49,12 +49,6 @@
         <nav class="toc-list" id="toc-drawer-list"></nav>
       </aside>
     </div>
-
-    <button type="button" class="toc-drawer-toggle" id="toc-drawer-toggle" aria-label="打开目录" aria-controls="toc-drawer">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-        <path fill="currentColor" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
-      </svg>
-    </button>
   </div>
 
   <script type="module">
@@ -685,21 +679,11 @@
       drawerEl.setAttribute('aria-hidden', 'true');
     }
 
-    const drawerToggleBtn = document.querySelector('#toc-drawer-toggle');
     if (drawerBackdropEl) {
       drawerBackdropEl.addEventListener('click', closeDrawer);
     }
     if (drawerCloseBtn) {
       drawerCloseBtn.addEventListener('click', closeDrawer);
-    }
-    if (drawerToggleBtn) {
-      drawerToggleBtn.addEventListener('click', () => {
-        if (drawerOpen) {
-          closeDrawer();
-        } else {
-          openDrawer();
-        }
-      });
     }
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && drawerOpen) {
@@ -708,75 +692,60 @@
       }
     });
 
-    const SWIPE_EDGE_PX = 40;
-    const SWIPE_DISTANCE_PX = 44;
-    const SWIPE_RATIO = 1.2;
-    let pointerOrigin = null;
+    const SWIPE_EDGE_PX = 24;
+    const SWIPE_DISTANCE_PX = 56;
+    let touchOrigin = null;
 
-    function getEventX(event) {
-      if (event.clientX !== undefined) return event.clientX;
-      if (event.touches && event.touches[0]) return event.touches[0].clientX;
-      if (event.changedTouches && event.changedTouches[0]) return event.changedTouches[0].clientX;
-      return 0;
-    }
+    window.addEventListener('touchstart', (event) => {
+      if (event.touches.length !== 1) return;
+      const t = event.touches[0];
+      touchOrigin = { x: t.clientX, y: t.clientY };
+    }, { passive: true });
 
-    function getEventY(event) {
-      if (event.clientY !== undefined) return event.clientY;
-      if (event.touches && event.touches[0]) return event.touches[0].clientY;
-      if (event.changedTouches && event.changedTouches[0]) return event.changedTouches[0].clientY;
-      return 0;
-    }
-
-    function onPointerStart(event) {
-      if (event.touches && event.touches.length !== 1) return;
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
-      pointerOrigin = { x: getEventX(event), y: getEventY(event), pointerId: event.pointerId };
-    }
-
-    function onPointerMove(event) {
-      if (!pointerOrigin) return;
-      if (event.touches && event.touches.length !== 1) return;
-      const dx = getEventX(event) - pointerOrigin.x;
-      const dy = getEventY(event) - pointerOrigin.y;
+    window.addEventListener('touchmove', (event) => {
+      if (!touchOrigin || event.touches.length !== 1) return;
+      const t = event.touches[0];
+      const dx = t.clientX - touchOrigin.x;
+      const dy = t.clientY - touchOrigin.y;
       if (drawerOpen) {
         const panelWidth = drawerPanelEl ? drawerPanelEl.offsetWidth : 0;
-        if (pointerOrigin.x > panelWidth && Math.abs(dx) > Math.abs(dy) * SWIPE_RATIO) {
+        if (touchOrigin.x > panelWidth && Math.abs(dx) > Math.abs(dy) * 1.5) {
           if (typeof event.cancelable === 'boolean' && !event.cancelable) return;
           event.preventDefault();
         }
       }
-    }
+    }, { passive: false });
 
-    function onPointerEnd(event) {
-      if (!pointerOrigin) return;
-      const dx = getEventX(event) - pointerOrigin.x;
-      const dy = getEventY(event) - pointerOrigin.y;
-      const startX = pointerOrigin.x;
-      pointerOrigin = null;
+    window.addEventListener('touchend', (event) => {
+      if (!touchOrigin) {
+        touchOrigin = null;
+        return;
+      }
+      const t = event.changedTouches[0];
+      if (!t) {
+        touchOrigin = null;
+        return;
+      }
+      const dx = t.clientX - touchOrigin.x;
+      const dy = t.clientY - touchOrigin.y;
+      const startX = touchOrigin.x;
 
       if (!drawerOpen) {
-        if (startX <= SWIPE_EDGE_PX && dx > SWIPE_DISTANCE_PX && dx > Math.abs(dy) * SWIPE_RATIO) {
+        if (startX <= SWIPE_EDGE_PX && dx > SWIPE_DISTANCE_PX && dx > Math.abs(dy) * 1.5) {
           openDrawer();
         }
       } else {
         const panelWidth = drawerPanelEl ? drawerPanelEl.offsetWidth : 0;
-        if (startX > panelWidth && dx < -SWIPE_DISTANCE_PX && Math.abs(dx) > Math.abs(dy) * SWIPE_RATIO) {
+        if (startX > panelWidth && dx < -SWIPE_DISTANCE_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {
           closeDrawer();
         }
       }
-    }
+      touchOrigin = null;
+    }, { passive: true });
 
-    if (typeof window.PointerEvent !== 'undefined') {
-      window.addEventListener('pointerdown', onPointerStart, { passive: true });
-      window.addEventListener('pointermove', onPointerMove, { passive: false });
-      window.addEventListener('pointerup', onPointerEnd, { passive: true });
-      window.addEventListener('pointercancel', () => { pointerOrigin = null; }, { passive: true });
-    } else {
-      window.addEventListener('touchstart', onPointerStart, { passive: true });
-      window.addEventListener('touchmove', onPointerMove, { passive: false });
-      window.addEventListener('touchend', onPointerEnd, { passive: true });
-      window.addEventListener('touchcancel', () => { pointerOrigin = null; }, { passive: true });
-    }
+    window.addEventListener('touchcancel', () => {
+      touchOrigin = null;
+    }, { passive: true });
 
     render();
   </script>

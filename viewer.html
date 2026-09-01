@@ -138,13 +138,32 @@
       };
     }
 
+    // 归一化写作格式造成的渲染异常:
+    //   ** 文字 **  →  **文字**
+    //   * 文字 *    →  *文字*
+    // 代码块已由 protectCode 替换为 @@CODE_N@@ 令牌,不会进入本函数;
+    // __ / _ 不处理,以免破坏 snake_case 标识符和文件名。
+    function normalizeWritingFormat(text) {
+      const trim = (s) => s.replace(/^\s+|\s+$/g, '');
+      const stash = [];
+      const masked = String(text).replace(/@@[A-Z_0-9]+@@/g, (m) => {
+        stash.push(m);
+        return `\u0001${stash.length - 1}`;
+      });
+      const restored = masked
+        .replace(/(?<![\*])\*\*([^*\n]+?)\*\*(?![\*])/g, (_, inner) => `**${trim(inner)}**`)
+        .replace(/(?<![\*])\*([^*\n]+?)\*(?![\*])/g, (_, inner) => `*${trim(inner)}*`);
+      return restored.replace(/\u0001(\d+)/g, (_, i) => stash[Number(i)]);
+    }
+
     function escapeRegExp(value) {
       return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
     function extractMath(source) {
       const protectedCode = protectCode(source);
-      let text = markHtmlImages(protectedCode.text);
+      let text = normalizeWritingFormat(protectedCode.text);
+      text = markHtmlImages(text);
       const inlineMath = [];
       const blockMath = [];
 
@@ -243,6 +262,36 @@
         if (significantNodes.length === 1 && significantNodes[0].nodeName === 'IMG') {
           parent.classList.add('image-only');
         }
+      });
+    }
+
+    // 第二道防线: DOM 层兜底。
+    // 当源文中存在 **text ** 这类配对成功但内部有空白的情况,
+    // 第一道防线已经把 ** 里的空白 trim 掉,
+    // 这里作为极端 case 的最后补救:把 <em>/<strong> 首尾 text node 的空白也去掉。
+    function trimEmphasisInDom(root) {
+      root.querySelectorAll('em, strong').forEach((el) => {
+        const first = el.firstChild;
+        const last = el.lastChild;
+        if (first && first.nodeType === Node.TEXT_NODE) {
+          first.nodeValue = first.nodeValue.replace(/^\s+/, '');
+        }
+        if (last && last.nodeType === Node.TEXT_NODE) {
+          last.nodeValue = last.nodeValue.replace(/\s+$/, '');
+        }
+      });
+    }
+
+    // 第三道防线: 检测仍未被 markdown-it 解析掉的裸强调标记,输出 console.warn 提示作者。
+    function warnUnresolvedEmphasis(root) {
+      root.querySelectorAll('p, li').forEach((el) => {
+        if (el.closest('pre, code')) return;
+        const matches = (el.textContent.match(/\*\*[^*\s][^*]*?\*\*|\*[^*\s][^*\s]*?\*|__[^\s][^_]*?__/g) || []);
+        if (!matches.length) return;
+        // 若本元素内部已有 <strong>/<em>,说明已被解析,跳过
+        if (el.querySelector('strong, em')) return;
+        // 仅提示,不影响渲染
+        console.warn('[viewer] 可能存在未配对的强调标记:', el.textContent.slice(0, 120), matches);
       });
     }
 
@@ -548,6 +597,8 @@
       centerStandaloneHtmlImages(writeEl);
       enhanceCodeBlocks(writeEl);
       enhanceTables(writeEl);
+      trimEmphasisInDom(writeEl);
+      warnUnresolvedEmphasis(writeEl);
       buildToc(writeEl);
       activeTocId = null;
 

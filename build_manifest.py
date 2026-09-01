@@ -6,6 +6,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -176,9 +177,11 @@ def auto_push(commit_message: str) -> None:
         branch = maybe_git(['branch', '--show-current']).stdout.strip() or 'master'
         result = maybe_git(['push', '-u', 'origin', branch], check=True)
         print(result.stdout.strip())
-        print(f'Pushed branch {branch} to origin.')
+        print(f'\033[92mPushed branch {branch} to origin successfully.\033[0m')
+        time.sleep(3)
+        raise SystemExit(0)
     except subprocess.CalledProcessError as exc:
-        print(f'\n[错误] git 操作失败: {exc}', file=sys.stderr)
+        print(f'\033[91m[错误] git 操作失败: {exc}\033[0m', file=sys.stderr)
         if exc.stdout:
             print('--- stdout ---', file=sys.stderr)
             print(exc.stdout, file=sys.stderr)

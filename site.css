@@ -776,7 +776,7 @@ ul.file-tree.is-tree-transitioning {
 }
 
 .toc-link.is-active .toc-text {
-  font-weight: 600;
+  color: #3b82c4;
 }
 
 .toc-marker {

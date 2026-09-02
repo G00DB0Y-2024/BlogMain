@@ -164,7 +164,7 @@ textarea {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   background-color: #ffffff;
-  background-image: url("./assets/profile2.png");
+  background-image: url("./assets/profile.png");
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;

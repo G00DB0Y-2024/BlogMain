@@ -17,11 +17,6 @@
   --radius-md: 6px;
   --radius-sm: 4px;
   --content-width: 1080px;
-
-  /* Background tile (viewer page). Edit --bg-tile-scale to zoom the tile. */
-  --bg-tile-image: url('./assets/back_block.png');
-  --bg-tile-base: 150px;          /* back_block.png 的物理尺寸 */
-  --bg-tile-scale: 1.2;           /* 默认 1.2 倍；改成 1 / 1.5 / 2 即可 */
 }
 
 * {
@@ -51,14 +46,7 @@ body.home-page {
 }
 
 body.viewer-page {
-  /* 用 calc() 把 150px 物理尺寸乘以倍数，得到最终平铺格子尺寸 */
-  background-color: #f6f7fb;
-  background-image: var(--bg-tile-image);
-  background-repeat: repeat;
-  background-position: 0 0;
-  background-size: calc(var(--bg-tile-base) * var(--bg-tile-scale))
-                   calc(var(--bg-tile-base) * var(--bg-tile-scale));
-  background-attachment: scroll;  /* 随滚动（用户已确认） */
+  background: #f6f7fb;
 }
 
 a {
@@ -456,87 +444,10 @@ ul.file-tree.is-tree-transitioning {
 }
 
 /* ===== Viewer Shell ===== */
-/* (原来的 .viewer-shell / .viewer-card / .viewer-bar 视觉块已合并到下方
-   "transparent shell + hidden bar" 区块中，文章现在直接浮在背景上。) */
-
-/* ===== Viewer: transparent shell + hidden bar (article floats on background) ===== */
 .viewer-shell {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  background: transparent;
-}
-
-.viewer-card {
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  overflow: visible;
-}
-
-.viewer-bar {
-  display: none;
-}
-
-/* ===== Floating top-left chrome (replaces hidden .viewer-bar) ===== */
-body.viewer-page .viewer-back,
-body.viewer-page .viewer-title {
-  position: fixed;
-  top: 16px;
-  z-index: 20;                 /* 低于 .toc-drawer(50)，抽屉打开时不会被遮挡 */
-  font-family: var(--font-sans);
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  transition: color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
-}
-
-/* 返回 Home：纯文字 */
-body.viewer-page .viewer-back {
-  left: 20px;
-  width: auto;
-  min-width: 0;
-  height: auto;
-  padding: 0;
-  font-size: 0.9rem;
-  color: var(--meta-color);
-  text-decoration: none;
-}
-
-body.viewer-page .viewer-back:hover,
-body.viewer-page .viewer-back:focus-visible {
-  color: var(--link-color);
-  transform: translateX(-2px);  /* 轻量"回退"动画 */
-  outline: none;
-}
-
-/* 文章标题（点击复制链接）：跟在 Home 右边 */
-body.viewer-page .viewer-title {
-  left: 80px;                              /* 给 Home 文字 + "←" 留宽度 */
-  max-width: calc(100vw - 100px);          /* 防止标题过长溢出屏幕 */
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--heading-color);
-  cursor: pointer;
-  /* 沿用原有省略号逻辑 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-body.viewer-page .viewer-title:hover,
-body.viewer-page .viewer-title:focus-visible {
-  color: var(--link-color);
-  outline: none;
-}
-
-/* "已复制链接"反馈：bar 隐藏后需独立浮起来 */
-body.viewer-page .copy-feedback {
-  position: fixed;
-  top: 18px;
-  left: 240px;                 /* 跟标题右对齐，必要时再微调 */
-  z-index: 20;
+  width: min(1080px, calc(100vw - 32px));
+  margin: 24px auto 40px;
+  background: #f6f7fb;
 }
 
 .viewer-card {
@@ -1065,27 +976,6 @@ body.viewer-page .copy-feedback {
 
   .viewer-toolbar {
     padding: 12px 16px 0;
-  }
-
-  /* 移动端覆盖：让浮动 chrome 在小屏继续可见 */
-  body.viewer-page .viewer-back,
-  body.viewer-page .viewer-title,
-  body.viewer-page .copy-feedback {
-    display: inline-block;
-    top: 12px;
-  }
-
-  body.viewer-page .viewer-back {
-    left: 14px;
-  }
-
-  body.viewer-page .viewer-title {
-    left: 64px;
-    max-width: calc(100vw - 80px);
-  }
-
-  body.viewer-page .copy-feedback {
-    left: 200px;
   }
 }
 
